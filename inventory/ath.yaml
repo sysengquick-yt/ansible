@@ -1,8 +1,11 @@
 ---
-debian:
+lxc:
   children:
-    lxc:
+    debian:
       hosts:
         ath.local.technoplaza.net:
+    redhat:
+      hosts:
+        fedora.local.technoplaza.net:
   vars:
     ansible_ssh_user: root
