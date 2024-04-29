@@ -35,15 +35,14 @@
             "source.organizeImports": "explicit"
           }
         },
-        "ansible.python.interpreterPath": "~/venv/bin/python3",
-
+        "ansible.python.interpreterPath": "/home/vscode/venv/bin/python3",
         "editor.formatOnSave": true,
         "files.associations": {
           "*.yml": "ansible"
         },
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
-        "python.defaultInterpreterPath": "~/venv/bin/python3"
+        "python.defaultInterpreterPath": "/home/vscode/venv/bin/python3"
       }
     }
   }
