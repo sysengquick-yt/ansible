@@ -3,6 +3,10 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bookworm
 RUN python3 -m pip install poetry~=1.8.2
 RUN ln -s /usr/share/bash-completion/completions/git /usr/share/bash-completion/bash_completion
 
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y sshpass
+RUN apt-get clean
+
 WORKDIR /workspaces/ansible
 
 COPY poetry.lock pyproject.toml .
