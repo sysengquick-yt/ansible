@@ -1,0 +1,11 @@
+---
+- name: Install neofetch
+  hosts: debian
+  gather_facts: false
+
+  tasks:
+    - name: Install neofetch
+      ansible.builtin.apt:
+        name: neofetch
+        state: present
+        update_cache: true
