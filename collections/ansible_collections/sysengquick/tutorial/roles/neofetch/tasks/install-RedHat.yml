@@ -1,0 +1,9 @@
+---
+- name: Update package cache
+  ansible.builtin.dnf:
+    update_cache: true
+
+- name: Install neofetch on RedHat
+  ansible.builtin.dnf:
+    name: neofetch
+    state: present

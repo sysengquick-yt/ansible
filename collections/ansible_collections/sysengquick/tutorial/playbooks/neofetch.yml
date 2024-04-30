@@ -4,22 +4,6 @@
   gather_facts: false
 
   tasks:
-    - name: Gather facts
-      ansible.builtin.setup:
-        gather_subset:
-          - "!all"
-          - "!min"
-          - os_family
-
-    - name: Install neofetch on Debian
-      ansible.builtin.apt:
-        name: neofetch
-        state: present
-        update_cache: true
-      when: ansible_facts['os_family'] == 'Debian'
-
-    - name: Install neofetch on RedHat
-      ansible.builtin.dnf:
-        name: neofetch
-        state: present
-      when: ansible_facts['os_family'] == 'RedHat'
+    - name: Run neofetch role
+      ansible.builtin.import_role:
+        name: sysengquick.tutorial.neofetch
