@@ -9,9 +9,13 @@ RUN apt-get clean
 
 WORKDIR /workspaces/ansible
 
+
 COPY poetry.lock pyproject.toml .
 RUN chown -R vscode:vscode /workspaces
 
 USER vscode
+# make prompt multiline cause it's too long by default
+RUN sed -i -E -e '/PS1="\$/c\    PS1="${userpart} ${lightblue}\\w ${gitbranch}${removecolor}\\n\\$ "' ~/.bashrc
+
 RUN poetry install
 RUN VN=$(poetry env list | head -n 1 | cut -d ' ' -f 1) && ln -s ~/.cache/pypoetry/virtualenvs/$VN ~/venv
