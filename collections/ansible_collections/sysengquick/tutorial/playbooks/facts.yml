@@ -1,6 +1,6 @@
 ---
 - name: Gather facts
-  hosts: redhat
+  hosts: debian
   gather_facts: true
 
   tasks:
