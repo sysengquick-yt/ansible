@@ -1,0 +1,18 @@
+---
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    state: present
+
+- name: Add sudo privileges
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/99_{{ user_name }}"
+    content: |
+      {{ user_name }} ALL=(ALL) NOPASSWD: ALL
+    mode: "0600"
+
+- name: Add ssh key to authorized_keys file
+  ansible.posix.authorized_key:
+    state: present
+    user: "{{ user_name }}"
+    key: "{{ lookup('ansible.builtin.file', '/private/ssh/ansible.pub') }}"
