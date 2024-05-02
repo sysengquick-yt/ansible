@@ -5,4 +5,4 @@ lxc:
       hosts:
         ath-proxy.local.technoplaza.net:
   vars:
-    ansible_ssh_user: root
+    ansible_ssh_user: ansible
