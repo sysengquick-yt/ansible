@@ -3,8 +3,10 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
+  become: true
 
 - name: Install neofetch on Debian
   ansible.builtin.apt:
     name: neofetch
     state: present
+  become: true
