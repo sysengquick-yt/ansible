@@ -1,6 +1,7 @@
 {
   "name": "ansible-tutorial-2024",
   "image": "ghcr.io/sysengquick-yt/ansible:latest",
+  "mounts": ["source=${env:HOME}/.ssh,target=/private/ssh,type=bind"],
 
   "customizations": {
     "vscode": {
