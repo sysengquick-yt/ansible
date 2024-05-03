@@ -4,6 +4,8 @@
   gather_facts: false
 
   tasks:
-    - name: Run neofetch role
+    - name: Install neofetch
       ansible.builtin.import_role:
-        name: sysengquick.tutorial.neofetch
+        name: sysengquick.tutorial.package
+      vars:
+        package_name: neofetch
