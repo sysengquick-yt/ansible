@@ -19,4 +19,4 @@
       ansible.posix.authorized_key:
         state: present
         user: "{{ user_name }}"
-        key: "{{ lookup('ansible.builtin.file', '/private/ssh/ansible.pub') }}"
+        key: "{{ lookup('ansible.builtin.file', user_key_file) }}"
