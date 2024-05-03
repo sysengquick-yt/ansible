@@ -1,12 +1,13 @@
 ---
-- name: Update package cache
-  ansible.builtin.apt:
-    update_cache: true
-    cache_valid_time: 3600
+- name: Become root to install packages
   become: true
+  block:
+    - name: Update package cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
 
-- name: Install neofetch on Debian
-  ansible.builtin.apt:
-    name: neofetch
-    state: present
-  become: true
+    - name: Install neofetch on Debian
+      ansible.builtin.apt:
+        name: neofetch
+        state: present
