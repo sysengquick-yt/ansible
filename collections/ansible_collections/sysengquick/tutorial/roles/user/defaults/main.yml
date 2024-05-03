@@ -1,3 +1,3 @@
 ---
-user_key_file: "/private/ssh/ansible.pub"
+user_key_file: "{{ global_user_key_file | default('/private/ssh/ansible.pub') }}"
 user_sudo: false
