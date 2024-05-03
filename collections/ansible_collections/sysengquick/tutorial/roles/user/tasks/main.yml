@@ -10,6 +10,7 @@
     content: |
       {{ user_name }} ALL=(ALL) NOPASSWD: ALL
     mode: "0600"
+  when: user_sudo
 
 - name: Add ssh key to authorized_keys file
   ansible.posix.authorized_key:
