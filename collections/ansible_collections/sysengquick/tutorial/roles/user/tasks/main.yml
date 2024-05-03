@@ -1,19 +1,22 @@
 ---
-- name: Create user
-  ansible.builtin.user:
-    name: "{{ user_name }}"
-    state: present
+- name: Become root
+  become: true
+  block:
+    - name: Create user
+      ansible.builtin.user:
+        name: "{{ user_name }}"
+        state: present
 
-- name: Add sudo privileges
-  ansible.builtin.copy:
-    dest: "/etc/sudoers.d/99_{{ user_name }}"
-    content: |
-      {{ user_name }} ALL=(ALL) NOPASSWD: ALL
-    mode: "0600"
-  when: user_sudo
+    - name: Add sudo privileges
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/99_{{ user_name }}"
+        content: |
+          {{ user_name }} ALL=(ALL) NOPASSWD: ALL
+        mode: "0600"
+      when: user_sudo
 
-- name: Add ssh key to authorized_keys file
-  ansible.posix.authorized_key:
-    state: present
-    user: "{{ user_name }}"
-    key: "{{ lookup('ansible.builtin.file', '/private/ssh/ansible.pub') }}"
+    - name: Add ssh key to authorized_keys file
+      ansible.posix.authorized_key:
+        state: present
+        user: "{{ user_name }}"
+        key: "{{ lookup('ansible.builtin.file', '/private/ssh/ansible.pub') }}"
