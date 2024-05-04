@@ -11,3 +11,9 @@
     src: gitconfig.j2
     dest: "{{ user_info['home'] }}/.gitconfig"
     mode: "0644"
+  vars:
+    values: |
+      {{
+        gitconfig_values_defaults
+        | ansible.builtin.combine(gitconfig_values, recursive=true)
+      }}
