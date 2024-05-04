@@ -1,6 +1,6 @@
 ---
 - name: Ping play
-  hosts: localhost
+  hosts: all
   gather_facts: false
 
   tasks:
