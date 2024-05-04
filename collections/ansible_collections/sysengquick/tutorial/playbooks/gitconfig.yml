@@ -1,0 +1,17 @@
+---
+- name: Template gitconfig
+  hosts: "{{ targets }}"
+  gather_facts: false
+
+  tasks:
+    - name: Template gitconfig
+      ansible.builtin.import_role:
+        name: sysengquick.tutorial.gitconfig
+      vars:
+        gitconfig_values: |
+          {{
+            lookup(
+              'ansible.builtin.file',
+              'vars/gitconfig/' ~ global_gitconfig_user | default('ansible') ~ '.yaml'
+            ) | from_yaml
+          }}
