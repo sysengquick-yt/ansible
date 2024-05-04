@@ -1,8 +1,16 @@
 ---
 lxc:
   children:
-    debian:
+    proxy:
       hosts:
         ath-proxy.local.technoplaza.net:
+    servers:
+      hosts:
+        bookworm.ath.local.technoplaza.net:
+        rocky9.ath.local.technoplaza.net:
+        fedora.ath.local.technoplaza.net:
+        arch.ath.local.technoplaza.net:
+      vars:
+        ansible_ssh_common_args: -J ansible@ath-proxy.local.technoplaza.net
   vars:
     ansible_ssh_user: ansible
