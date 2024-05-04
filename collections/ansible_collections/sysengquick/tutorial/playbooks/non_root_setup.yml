@@ -1,6 +1,6 @@
 ---
 - name: Create non-root user for ansible
-  hosts: lxc
+  hosts: "{{ targets | default('lxc') }}"
   gather_facts: false
 
   tasks:
