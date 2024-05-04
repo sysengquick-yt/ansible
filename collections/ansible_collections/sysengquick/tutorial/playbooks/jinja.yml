@@ -38,12 +38,14 @@
       ansible.builtin.import_role:
         name: sysengquick.tutorial.gitconfig
       vars:
-        gitconfig_name: John Ratliff
-        gitconfig_email: john@technoplaza.net
-        gitconfig_use_vscode: true
-        gitconfig_aliases:
-          - name: oneline
-            value: log --oneline
+        gitconfig_values:
+          user:
+            name: John Ratliff
+            email: john@technoplaza.net
+          editor: vscode
+          alias:
+            - name: oneline
+              command: log --oneline
       when: |
         lookup('ansible.builtin.env', 'USER')
-        is ansible.builtin.regex('^(ansible|vscodfe)$')
+        is ansible.builtin.regex('^(ansible|vscode)$')
