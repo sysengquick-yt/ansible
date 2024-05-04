@@ -1,0 +1,21 @@
+---
+user:
+  name: John Ratliff
+  email: john@technoplaza.net
+
+pull:
+  rebase: true
+
+alias:
+  - name: oneline
+    command: log --oneline
+
+credential:
+  - url: https://github.com
+    options:
+      - key: username
+        value: sysengquick
+      - key: helper
+        value: cache --timeout 14400
+
+editor: vscode
