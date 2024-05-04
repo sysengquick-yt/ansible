@@ -1,6 +1,6 @@
 ---
 - name: Gather facts
-  hosts: debian
+  hosts: proxy
   gather_facts: true
 
   tasks:
