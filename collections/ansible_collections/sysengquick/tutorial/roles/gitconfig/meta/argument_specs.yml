@@ -1,0 +1,84 @@
+---
+argument_specs:
+  main:
+    short_description: Templates gitconfig file
+    description:
+      - Template gitconfig according to supplied user parameters
+    author:
+      - John Ratliff <john@technoplaza.net>
+    options:
+      gitconfig_values:
+        type: dict
+        required: true
+        description: The gitconfig values
+        options:
+          user:
+            type: dict
+            required: true
+            description: The user section properties
+            options:
+              name:
+                type: str
+                required: true
+                description: The git user's name
+              email:
+                type: str
+                required: true
+                description: The git user's email
+          pull:
+            type: dict
+            required: false
+            default:
+              rebase: false
+            description: The pull section properties
+            options:
+              rebase:
+                type: bool
+                required: false
+                default: false
+                description: Set rebase by default
+          alias:
+            type: list
+            elements: dict
+            required: false
+            default: []
+            description: The git aliases to add
+            options:
+              name:
+                type: str
+                required: true
+                description: Name of the git alias
+              command:
+                type: str
+                required: true
+                description: Git alias command
+          editor:
+            type: str
+            required: false
+            default: ~
+            description: Which editor to use with git
+          credential:
+            type: list
+            elements: dict
+            required: false
+            default: []
+            description: Credential helpers to use with git
+            options:
+              url:
+                type: str
+                required: true
+                description: The url to associate with this credential helper
+              options:
+                type: list
+                elements: dict
+                required: true
+                description: The git credential options
+                options:
+                  key:
+                    type: str
+                    required: true
+                    description: The key for the credential option
+                  value:
+                    type: str
+                    required: true
+                    description: The value for the credential option
