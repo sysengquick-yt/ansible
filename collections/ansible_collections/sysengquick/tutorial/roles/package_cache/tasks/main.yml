@@ -16,5 +16,6 @@
       when: ansible_facts.os_family is in supported_families
       vars:
         supported_families:
+          - Archlinux
           - Debian
           - RedHat
