@@ -1,0 +1,49 @@
+---
+- name: Test Jinja in Ansible
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Load json data from file
+      ansible.builtin.set_fact:
+        json_data: "{{ lookup('ansible.builtin.file', 'files/jinja.json') | from_json }}"
+
+    - name: Display json_data
+      ansible.builtin.debug:
+        var: json_data
+
+    - name: Display server_names
+      ansible.builtin.debug:
+        var: server_names
+      vars:
+        server_names: |
+          {{
+            json_data['domain']['server']
+            | map(attribute='name', default=false)
+            | select
+            | list
+          }}
+
+    - name: Display server_names with json_query
+      ansible.builtin.debug:
+        var: server_names
+      vars:
+        server_names: |
+          {{
+            json_data
+            | community.general.json_query('domain.server[*].name')
+          }}
+
+    - name: Configure gitconfig
+      ansible.builtin.import_role:
+        name: sysengquick.tutorial.gitconfig
+      vars:
+        gitconfig_name: John Ratliff
+        gitconfig_email: john@technoplaza.net
+        gitconfig_use_vscode: true
+        gitconfig_aliases:
+          - name: oneline
+            value: log --oneline
+      when: |
+        lookup('ansible.builtin.env', 'USER')
+        is ansible.builtin.regex('^(ansible|vscodfe)$')
