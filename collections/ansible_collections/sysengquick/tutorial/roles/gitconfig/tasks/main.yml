@@ -1,6 +1,13 @@
 ---
+- name: Lookup home directory
+  ansible.builtin.user:
+    name: "{{ ansible_ssh_user }}"
+    state: present
+  check_mode: true
+  register: user_info
+
 - name: Write gitconfig
   ansible.builtin.template:
     src: gitconfig.j2
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.gitconfig"
+    dest: "{{ user_info['home'] }}/.gitconfig"
     mode: "0644"
