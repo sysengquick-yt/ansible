@@ -1,0 +1,7 @@
+---
+gitconfig_values_defaults:
+  pull:
+    rebase: false
+  alias: []
+  credential: []
+  editor: ~
