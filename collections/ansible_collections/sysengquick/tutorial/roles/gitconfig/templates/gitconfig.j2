@@ -1,15 +1,27 @@
 [user]
-    name = {{ gitconfig_name }}
-    email = {{ gitconfig_email }}
-{% if gitconfig_use_vscode %}
+    name = {{ values['user']['name'] }}
+    email = {{ values['user']['email'] }}
+[pull]
+    rebase = {{ values['pull']['rebase'] }}
+{% for helper in values['credential'] %}
+[credential "{{ helper['url'] }}"]
+{% for option in helper['options'] %}
+    {{ option['key'] }} = {{ option['value'] }}
+{% endfor %}
+{% endfor %}
+{% if values['editor'] %}
 [core]
+{% if values['editor'] == 'vscode' %}
 	editor = code --wait
 [diff]
 	tool = default-difftool
 [difftool "default-difftool"]
 	cmd = code --wait --diff $LOCAL $REMOTE
+{% else %}
+    editor = {{ values['editor'] }}
+{% endif %}
 {% endif %}
 [alias]
-{% for alias in gitconfig_aliases %}
-    {{ alias['name'] }} = {{ alias['value'] }}
+{% for alias in values['alias'] %}
+    {{ alias['name'] }} = {{ alias['command'] }}
 {% endfor %}
