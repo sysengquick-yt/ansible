@@ -4,4 +4,5 @@ user_key_file: |-
     global_user_key_file
     | default(lookup('ansible.builtin.env', 'HOME') ~ '/wsl-ssh/ansible.pub')
   }}
+user_shell: /bin/bash
 user_sudo: false

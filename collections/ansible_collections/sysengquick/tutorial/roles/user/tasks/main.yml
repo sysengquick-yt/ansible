@@ -5,6 +5,7 @@
     - name: Create user
       ansible.builtin.user:
         name: "{{ user_name }}"
+        shell: "{{ user_shell }}"
         state: present
 
     - name: Add sudo privileges
