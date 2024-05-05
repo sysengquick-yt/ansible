@@ -1,7 +1,10 @@
 {
   "name": "ansible-tutorial-2024",
   "image": "ghcr.io/sysengquick-yt/ansible:latest",
-  "mounts": ["source=${env:HOME}/.ssh,target=/private/ssh,type=bind"],
+  "mounts": [
+    "source=${env:HOME}/.ssh,target=/home/vscode/wsl-ssh,type=bind",
+    "source=${env:HOME}/private,target=/home/vscode/private,type=bind"
+  ],
 
   "customizations": {
     "vscode": {
@@ -37,6 +40,7 @@
           }
         },
         "ansible.python.interpreterPath": "/home/vscode/venv/bin/python3",
+        "ansibleVault.executable": "/home/vscode/venv/bin/ansible-vault",
         "editor.formatOnSave": true,
         "files.associations": {
           "*.yml": "ansible"
