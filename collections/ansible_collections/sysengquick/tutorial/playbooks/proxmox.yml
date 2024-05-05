@@ -1,0 +1,15 @@
+---
+- name: List proxmox servers
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vars/vault/proxmox.yaml
+
+  tasks:
+    - name: Gather proxmox server info
+      community.general.proxmox_vm_info:
+        api_host: pve.local.technoplaza.net
+        api_user: root@pam
+        api_token_id: ansible
+        api_token_secret: "{{ vault.proxmox.root_token }}"
+        node: pve
