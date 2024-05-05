@@ -1,17 +1,16 @@
 ---
 - name: Lookup user home directory
-  ansible.builtin.setup:
-    gather_subset:
-      - "!all"
-      - "!min"
-      - user_dir
-  when: "'user_dir' is not in ansible_facts"
+  sysengquick.tutorial.user_info:
+    username: "{{ gitconfig_user }}"
+  register: result
 
 - name: Write gitconfig
   ansible.builtin.template:
     src: gitconfig.j2
-    dest: "{{ ansible_facts['user_dir'] }}/.gitconfig"
-    mode: "0644"
+    dest: "{{ gitconfig_dest }}"
+    mode: "{{ gitconfig_mode }}"
+  become: true
+  become_user: "{{ gitconfig_user }}"
   vars:
     values: |
       {{
