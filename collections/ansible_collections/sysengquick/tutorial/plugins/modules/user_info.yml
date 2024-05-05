@@ -1,0 +1,30 @@
+---
+DOCUMENTATION:
+  module: user_info
+  short_description: Gathers information about a user account
+  description: Gathers information about a user account
+  author:
+    - John Ratliff <john@technoplaza.net>
+  options:
+    username:
+      type: str
+      required: true
+      description: The username to gather information for
+
+EXAMPLES: |
+  # Get information about the vscode user
+  - name: Gather information about vscode user
+    sysengquick.tutorial.user_info:
+      username: vscode
+
+RETURN:
+  user_info:
+    type: dict
+    description: The user information gathered from the remote system
+    returned: always
+    sample:
+      user_info:
+        gid: 1000
+        home: /home/vscode
+        uid: 1000
+        username: vscode
