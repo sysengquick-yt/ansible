@@ -39,7 +39,9 @@ tags: [linux]
 # collection label 'namespace.name'. The value is a version range
 # L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
 # range specifiers can be set and are separated by ','
-dependencies: {}
+dependencies:
+  ansible.posix: ">=1.5.4,<1.6.0"
+  community.general: ">=8.6.0,<8.7.0"
 
 # The URL of the originating SCM repository
 repository: https://github.com/sysengquick-yt/ansible

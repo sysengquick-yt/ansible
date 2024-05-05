@@ -19,5 +19,6 @@ RUN sed -i -E -e '/PS1="\$/c\    PS1="${userpart} ${lightblue}\\w ${gitbranch}${
 RUN poetry install
 RUN VN=$(poetry env list | head -n 1 | cut -d ' ' -f 1) && ln -s ~/.cache/pypoetry/virtualenvs/$VN ~/venv
 
-COPY collections/requirements.yml .
-RUN poetry run -- ansible-galaxy collection install -r requirements.yml
+COPY collections/ansible_collections/sysengquick/tutorial/galaxy.yml .
+RUN poetry run -- ansible-galaxy collection install .
+RUN rm -rf ~/.ansible/collections/ansible_collections/sysengquick/tutorial
