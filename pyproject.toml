@@ -12,6 +12,8 @@ python = "^3.12"
 ansible-core = "~=2.16.6"
 ansible-lint = { version = "^24.2.2", markers = 'platform_system != "Windows"' }
 jmespath = "^1.0.1"
+proxmoxer = "^2.0.1"
+requests = "^2.31.0"
 
 
 [build-system]
