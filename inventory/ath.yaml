@@ -4,6 +4,9 @@ lxc:
     proxy:
       hosts:
         ath-proxy.local.technoplaza.net:
+    docker:
+      hosts:
+        jammy.ath.local.technoplaza.net:
     servers:
       hosts:
         arch.ath.local.technoplaza.net:
