@@ -12,6 +12,10 @@ WORKDIR /workspaces/ansible
 COPY poetry.lock pyproject.toml .
 RUN chown -R vscode:vscode /workspaces
 
+RUN apt-get update
+RUN apt-get install -y vim
+RUN apt-get clean
+
 USER vscode
 # make prompt multiline cause it's too long by default
 RUN sed -i -E -e '/PS1="\$/c\    PS1="${userpart} ${lightblue}\\w ${gitbranch}${removecolor}\\n\\$ "' ~/.bashrc
