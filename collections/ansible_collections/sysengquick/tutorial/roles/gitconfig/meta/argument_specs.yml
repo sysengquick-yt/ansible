@@ -7,6 +7,21 @@ argument_specs:
     author:
       - John Ratliff <john@technoplaza.net>
     options:
+      gitconfig_dest:
+        type: str
+        required: false
+        default: ~/.gitconfig
+        description: The path to the gitconfig file to template
+      gitconfig_mode:
+        type: str
+        required: false
+        default: "0644"
+        description: The file mode to set on the gitconfig
+      gitconfig_user:
+        type: str
+        required: false
+        default: The user running ansible
+        description: The user whose gitconfig will be templated
       gitconfig_values:
         type: dict
         required: true

@@ -1,3 +1,8 @@
 ---
-gitconfig_aliases: []
-gitconfig_use_vscode: false
+gitconfig_dest: "{{ result['user_info']['home'] }}/.gitconfig"
+gitconfig_mode: "0644"
+gitconfig_user: >-
+  {{
+    ansible_user
+    | default(lookup('ansible.builtin.env', 'USER'))
+  }}
