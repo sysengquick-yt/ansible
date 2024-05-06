@@ -1,0 +1,7 @@
+---
+proxmox:
+  hosts:
+    pve.local.technoplaza.net:
+      ansible_user: jdratlif
+      ansible_password: "{{ vault.proxmox_user_password }}"
+      ansible_become_pass: "{{ vault.proxmox_user_password }}"
