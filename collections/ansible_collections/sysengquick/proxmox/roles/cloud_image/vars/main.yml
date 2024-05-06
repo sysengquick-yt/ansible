@@ -1,0 +1,3 @@
+---
+cloud_image_url: "{{ cloud_image_url_base }}/{{ cloud_image_file }}"
+cloud_image_url_checksum: "{{ cloud_image_url_base }}/{{ cloud_image_file_checksum }}"

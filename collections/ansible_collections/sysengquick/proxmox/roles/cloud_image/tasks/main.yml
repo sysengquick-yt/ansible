@@ -1,0 +1,45 @@
+---
+- name: Create image directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ cloud_image_dest }}"
+    mode: "0700"
+  become: true
+
+- name: Delete temp file at the end of the block
+  block:
+    - name: Create tempfile
+      ansible.builtin.tempfile:
+      register: tempfile
+
+    - name: Download checksum
+      ansible.builtin.get_url:
+        dest: "{{ tempfile.path }}"
+        mode: "0644"
+        url: "{{ cloud_image_url_checksum }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Download cloud image
+      ansible.builtin.get_url:
+        dest: "{{ cloud_image_dest }}"
+        mode: "0644"
+        url: "{{ cloud_image_url }}"
+        checksum: "{{ checksum }}"
+      become: true
+      vars:
+        checksum: |-
+          {{
+            lookup('ansible.builtin.file', tempfile.path)
+            | ansible.builtin.regex_search(regex)
+            | ansible.builtin.regex_replace(regex, replace)
+          }}
+        regex: |-
+          SHA(256|512) \({{ cloud_image_file }}\) = ([a-f0-9]+)
+        replace: |-
+          sha\1:\2
+  always:
+    - name: Delete tempfile
+      ansible.builtin.file:
+        state: absent
+        path: "{{ tempfile.path }}"
