@@ -4,17 +4,17 @@ lxc:
     proxy:
       hosts:
         ath-proxy.local.technoplaza.net:
-    docker:
-      hosts:
-        jammy.ath.local.technoplaza.net:
     servers:
       hosts:
         arch.ath.local.technoplaza.net:
         bookworm.ath.local.technoplaza.net:
         centos8.ath.local.technoplaza.net:
-        fedora.ath.local.technoplaza.net:
+        jammy.ath.local.technoplaza.net:
         rocky9.ath.local.technoplaza.net:
       vars:
-        ansible_ssh_common_args: -J ansible@ath-proxy.local.technoplaza.net
+        ansible_ssh_common_args: "-o ProxyCommand=\
+          'ssh -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          -W %h:%p ansible@ath-proxy.local.technoplaza.net'"
   vars:
     ansible_user: ansible
