@@ -28,7 +28,7 @@
     serial:
       serial0: socket
     sshkeys: |
-      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAX5U3zEBAXmQtEskXyv54TaNhM9ss6G7IhpJ9w6QofB jdratlif@xaiver11
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQRZM5OpaNZztF6Sg0dUofqZKkeW9RpCwpm+r0XA3QP vscode@de19599a6f19
     vga: serial0
   register: result
 
