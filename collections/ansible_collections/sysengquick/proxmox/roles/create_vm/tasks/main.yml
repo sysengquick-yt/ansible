@@ -1,0 +1,48 @@
+---
+- name: Create cloud VM
+  community.general.proxmox_kvm:
+    api_host: "{{ proxmox_api_host }}"
+    api_user: "{{ proxmox_api_user }}"
+    api_token_id: "{{ proxmox_api_token_id }}"
+    api_token_secret: "{{ proxmox_api_token_secret }}"
+    name: proxy.ath.local.technoplaza.net
+    agent: enabled=1
+    balloon: 0
+    boot: order=scsi0
+    cipassword: "IamA$ecurePasswurd!"
+    ciuser: ansible
+    cores: 4
+    cpu: host
+    ide:
+      ide2: "local:cloudinit,format=qcow2"
+    ipconfig:
+      ipconfig0: ip=dhcp
+    memory: 4096
+    net:
+      net0: model=virtio,bridge=vmbr0,firewall=0,mtu=1
+    node: "{{ proxmox_node }}"
+    ostype: l26
+    scsi:
+      scsi0: "local:0,import-from=nas:0/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2,format=qcow2,iothread=1,discard=on,ssd=1"
+    scsihw: virtio-scsi-single
+    serial:
+      serial0: socket
+    sshkeys: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAX5U3zEBAXmQtEskXyv54TaNhM9ss6G7IhpJ9w6QofB jdratlif@xaiver11
+    vga: serial0
+  register: result
+
+- name: Save vmid
+  ansible.builtin.set_fact:
+    proxmox_vmid: "{{ result['vmid'] }}"
+
+- name: Resize disk
+  community.general.proxmox_disk:
+    api_host: "{{ proxmox_api_host }}"
+    api_user: "{{ proxmox_api_user }}"
+    api_token_id: "{{ proxmox_api_token_id }}"
+    api_token_secret: "{{ proxmox_api_token_secret }}"
+    disk: scsi0
+    vmid: "{{ proxmox_vmid }}"
+    size: 32G
+    state: resized
