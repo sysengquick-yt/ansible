@@ -1,0 +1,26 @@
+---
+- name: Lookup vault file path
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Register the vault file path
+      ansible.builtin.set_fact:
+        vault_file_path: "{{ playbook_dir }}/vars/vault/proxmox.yaml"
+
+- name: Run create_cloud_vm playbook
+  ansible.builtin.import_playbook: sysengquick.proxmox.create_cloud_vm
+  vars:
+    cloud_image_dest: /tank/nas/proxmox/images/0
+    proxmox_api:
+      host: pve.local.technoplaza.net
+      user: root@pam
+      token_id: ansible
+      token_secret: "{{ vault.proxmox_api.token_secret }}"
+    proxmox_node: pve
+    vault: |-
+      {{
+        lookup('ansible.builtin.file', hostvars['localhost']['vault_file_path'])
+        | ansible.builtin.unvault('vault')
+        | from_yaml
+      }}
