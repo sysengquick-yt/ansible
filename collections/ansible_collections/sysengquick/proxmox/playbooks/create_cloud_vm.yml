@@ -7,8 +7,6 @@
     - name: Download cloud image
       ansible.builtin.import_role:
         name: sysengquick.proxmox.cloud_image
-      vars:
-        cloud_image_dest: /tank/nas/proxmox/images/0
 
 - name: Create VM on proxmox host
   hosts: localhost
