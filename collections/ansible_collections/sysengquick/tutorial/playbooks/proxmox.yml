@@ -11,5 +11,5 @@
         api_host: pve.local.technoplaza.net
         api_user: root@pam
         api_token_id: ansible
-        api_token_secret: "{{ vault.proxmox.root_token }}"
+        api_token_secret: "{{ proxmox_api.token_secret }}"
         node: pve
