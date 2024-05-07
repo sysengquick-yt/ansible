@@ -1,6 +1,7 @@
 ---
-proxmox_api_host: pve.local.technoplaza.net
-proxmox_api_user: root@pam
-proxmox_api_token_id: ansible
-proxmox_api_token_secret: "{{ vault.proxmox_api_token_secret }}"
+proxmox_api:
+  host: pve.local.technoplaza.net
+  user: root@pam
+  token_id: ansible
+  token_secret: "{{ vault.proxmox_api_token_secret }}"
 proxmox_node: pve

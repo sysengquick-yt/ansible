@@ -1,10 +1,10 @@
 ---
 - name: Create cloud VM
   community.general.proxmox_kvm:
-    api_host: "{{ proxmox_api_host }}"
-    api_user: "{{ proxmox_api_user }}"
-    api_token_id: "{{ proxmox_api_token_id }}"
-    api_token_secret: "{{ proxmox_api_token_secret }}"
+    api_host: "{{ proxmox_api['host'] }}"
+    api_user: "{{ proxmox_api['user'] }}"
+    api_token_id: "{{ proxmox_api['token_id'] }}"
+    api_token_secret: "{{ proxmox_api['token_secret'] }}"
     name: proxy.ath.local.technoplaza.net
     agent: enabled=1
     balloon: 0
@@ -38,10 +38,10 @@
 
 - name: Resize disk
   community.general.proxmox_disk:
-    api_host: "{{ proxmox_api_host }}"
-    api_user: "{{ proxmox_api_user }}"
-    api_token_id: "{{ proxmox_api_token_id }}"
-    api_token_secret: "{{ proxmox_api_token_secret }}"
+    api_host: "{{ proxmox_api['host'] }}"
+    api_user: "{{ proxmox_api['user'] }}"
+    api_token_id: "{{ proxmox_api['token_id'] }}"
+    api_token_secret: "{{ proxmox_api['token_secret'] }}"
     disk: scsi0
     vmid: "{{ proxmox_vmid }}"
     size: 32G
