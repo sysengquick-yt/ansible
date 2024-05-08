@@ -4,22 +4,18 @@ RUN python3 -m pip install poetry~=1.8.2
 RUN ln -s /usr/share/bash-completion/completions/git /usr/share/bash-completion/bash_completion
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y sshpass
+RUN apt-get install -y sshpass vim
 RUN apt-get clean
 
 WORKDIR /workspaces/ansible
-
-COPY poetry.lock pyproject.toml .
 RUN chown -R vscode:vscode /workspaces
 
-RUN apt-get update
-RUN apt-get install -y vim
-RUN apt-get clean
-
 USER vscode
+
 # make prompt multiline cause it's too long by default
 RUN sed -i -E -e '/PS1="\$/c\    PS1="${userpart} ${lightblue}\\w ${gitbranch}${removecolor}\\n\\$ "' ~/.bashrc
 
+COPY poetry.lock pyproject.toml .
 RUN poetry install
 RUN VN=$(poetry env list | head -n 1 | cut -d ' ' -f 1) && ln -s ~/.cache/pypoetry/virtualenvs/$VN ~/venv
 
