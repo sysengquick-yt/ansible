@@ -33,6 +33,7 @@
         firewall={{ values['network']['firewall'] }},\
         mtu={{ values['network']['mtu'] }}"
     node: "{{ values['node'] }}"
+    onboot: "{{ values['onboot'] }}"
     ostype: l26
     scsi:
       scsi0: "{{ values['disk']['storage'] }}:0,\
