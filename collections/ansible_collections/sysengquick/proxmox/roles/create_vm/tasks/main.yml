@@ -1,7 +1,7 @@
 ---
 - name: Register values
   ansible.builtin.set_fact:
-    values: |
+    create_vm_values_combined: |
       {{
         create_vm_values_defaults
         | ansible.builtin.combine(create_vm_values, recursive=true)
@@ -50,6 +50,8 @@
     sshkeys: "{{ values['cloud_init']['sshkeys'] }}"
     vga: serial0
   register: result
+  vars:
+    values: "{{ create_vm_values_combined }}"
 
 - name: Save vmid
   ansible.builtin.set_fact:
@@ -65,3 +67,5 @@
     vmid: "{{ proxmox_vmid }}"
     size: "{{ values['disk']['size'] }}G"
     state: resized
+  vars:
+    values: "{{ create_vm_values_combined }}"
