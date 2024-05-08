@@ -1,0 +1,29 @@
+---
+create_vm_values_defaults:
+  balloon: 0
+  cloud_init:
+    format: qcow2
+    password: "$ecretPassw0rd!"
+    sshkeys: ~
+    storage: local
+    user: ansible
+  cpu_cores: 1
+  cpu_type: host
+  disk:
+    discard: "on"
+    format: qcow2
+    image:
+      storage: local
+      vmid: 0
+    iothread: 1
+    size: 8
+    ssd: 1
+    storage: local
+  memory: 2048
+  network:
+    ipconfig: ip=dhcp
+    model: virtio
+    bridge: vmbr0
+    firewall: 0
+    mtu: 1
+  onboot: false

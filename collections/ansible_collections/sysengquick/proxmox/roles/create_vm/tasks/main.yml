@@ -1,34 +1,52 @@
 ---
+- name: Register values
+  ansible.builtin.set_fact:
+    values: |
+      {{
+        create_vm_values_defaults
+        | ansible.builtin.combine(create_vm_values, recursive=true)
+      }}
+
 - name: Create cloud VM
   community.general.proxmox_kvm:
-    api_host: "{{ proxmox_api['host'] }}"
-    api_user: "{{ proxmox_api['user'] }}"
-    api_token_id: "{{ proxmox_api['token_id'] }}"
-    api_token_secret: "{{ proxmox_api['token_secret'] }}"
-    name: proxy.ath.local.technoplaza.net
+    api_host: "{{ create_vm_api['host'] }}"
+    api_user: "{{ create_vm_api['user'] }}"
+    api_token_id: "{{ create_vm_api['token_id'] }}"
+    api_token_secret: "{{ create_vm_api['token_secret'] }}"
+    name: "{{ values['name'] }}"
     agent: enabled=1
-    balloon: 0
+    balloon: "{{ values['balloon'] }}"
     boot: order=scsi0
-    cipassword: "IamA$ecurePasswurd!"
-    ciuser: ansible
-    cores: 4
-    cpu: host
+    cipassword: "{{ values['cloud_init']['password'] }}"
+    ciuser: "{{ values['cloud_init']['user'] }}"
+    cores: "{{ values['cpu_cores'] }}"
+    cpu: "{{ values['cpu_type'] }}"
     ide:
-      ide2: "local:cloudinit,format=qcow2"
+      ide2: "{{ values['cloud_init']['storage'] }}:cloudinit,\
+        format={{ values['cloud_init']['format'] }}"
     ipconfig:
-      ipconfig0: ip=dhcp
-    memory: 4096
+      ipconfig0: "{{ values['network']['ipconfig'] }}"
+    memory: "{{ values['memory'] }}"
     net:
-      net0: model=virtio,bridge=vmbr0,firewall=0,mtu=1
-    node: "{{ proxmox_node }}"
+      net0: "model={{ values['network']['model'] }},\
+        bridge={{ values['network']['bridge'] }},\
+        firewall={{ values['network']['firewall'] }},\
+        mtu={{ values['network']['mtu'] }}"
+    node: "{{ values['node'] }}"
     ostype: l26
     scsi:
-      scsi0: "local:0,import-from=nas:0/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2,format=qcow2,iothread=1,discard=on,ssd=1"
+      scsi0: "{{ values['disk']['storage'] }}:0,\
+        import-from={{ values['disk']['image']['storage'] }}\
+        :{{ values['disk']['image']['vmid'] }}\
+        /{{ values['disk']['image']['file'] }},\
+        format={{ values['disk']['format'] }},\
+        iothread={{ values['disk']['iothread'] }},\
+        discard={{ values['disk']['discard'] }},\
+        ssd={{ values['disk']['ssd'] }}"
     scsihw: virtio-scsi-single
     serial:
       serial0: socket
-    sshkeys: |
-      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQRZM5OpaNZztF6Sg0dUofqZKkeW9RpCwpm+r0XA3QP vscode@de19599a6f19
+    sshkeys: "{{ values['cloud_init']['sshkeys'] }}"
     vga: serial0
   register: result
 
@@ -38,11 +56,11 @@
 
 - name: Resize disk
   community.general.proxmox_disk:
-    api_host: "{{ proxmox_api['host'] }}"
-    api_user: "{{ proxmox_api['user'] }}"
-    api_token_id: "{{ proxmox_api['token_id'] }}"
-    api_token_secret: "{{ proxmox_api['token_secret'] }}"
+    api_host: "{{ create_vm_api['host'] }}"
+    api_user: "{{ create_vm_api['user'] }}"
+    api_token_id: "{{ create_vm_api['token_id'] }}"
+    api_token_secret: "{{ create_vm_api['token_secret'] }}"
     disk: scsi0
     vmid: "{{ proxmox_vmid }}"
-    size: 32G
+    size: "{{ values['disk']['size'] }}G"
     state: resized
