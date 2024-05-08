@@ -12,12 +12,24 @@
   ansible.builtin.import_playbook: sysengquick.proxmox.create_cloud_vm
   vars:
     cloud_image_dest: /tank/nas/proxmox/images/0
-    proxmox_api:
+    create_vm_api:
       host: pve.local.technoplaza.net
       user: root@pam
       token_id: ansible
       token_secret: "{{ vault.proxmox_api.token_secret }}"
-    proxmox_node: pve
+    create_vm_values:
+      name: proxy.ath.local.technoplaza.net
+      cloud_init:
+        sshkeys: |
+          ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQRZM5OpaNZztF6Sg0dUofqZKkeW9RpCwpm+r0XA3QP vscode@de19599a6f19
+      cpu_cores: 4
+      disk:
+        image:
+          file: Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2
+          storage: nas
+        size: 32
+      memory: 4096
+      node: pve
     vault: |-
       {{
         lookup('ansible.builtin.file', hostvars['localhost']['vault_file_path'])
