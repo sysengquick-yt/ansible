@@ -11,6 +11,7 @@
 - name: Run create_cloud_vm playbook
   ansible.builtin.import_playbook: sysengquick.proxmox.create_cloud_vm
   vars:
+    global_cloud_image_name: fedora
     cloud_image_dest: /tank/nas/proxmox/images/0
     create_vm_api:
       host: pve.local.technoplaza.net
@@ -25,7 +26,6 @@
       cpu_cores: 4
       disk:
         image:
-          file: Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2
           storage: nas
         size: 32
       memory: 4096
