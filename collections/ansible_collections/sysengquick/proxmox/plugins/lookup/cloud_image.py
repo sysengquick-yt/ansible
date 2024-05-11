@@ -53,9 +53,10 @@ class LookupModule(LookupBase):
                     orig_exc=e,
                 )
 
-    def run(self, terms, variables=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         self._load_cloud_images()
 
+    def run(self, terms, variables=None, **kwargs):
         terms_count = len(terms)
 
         if terms_count != 1:
