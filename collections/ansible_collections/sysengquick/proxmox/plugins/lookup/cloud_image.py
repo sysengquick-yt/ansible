@@ -68,17 +68,17 @@ class LookupModule(LookupBase):
         if image_name not in self.cloud_images:
             raise AnsibleLookupError(f"Unable to find image {image_name}")
 
-        image_properties = self.cloud_images[image_name]
+        cloud_image = self.cloud_images[image_name]
 
-        filename = image_properties.image
+        filename = cloud_image.image
 
         if not filename.endswith(".qcow2"):
             filename += ".qcow2"
 
-        image = {
-            "checksum_url": f"{image_properties.url}/{image_properties.checksum}",
-            "image_url": f"{image_properties.url}/{image_properties.image}",
+        properties = {
+            "checksum_url": f"{cloud_image.url}/{cloud_image.checksum}",
+            "image_url": f"{cloud_image.url}/{cloud_image.image}",
             "filename": filename,
         }
 
-        return [image]
+        return [properties]
