@@ -8,6 +8,13 @@ import re
 from ansible.errors import AnsibleFilterError
 
 
+def qcow2_image_name(filename: str) -> str:
+    if not filename.endswith(".qcow2"):
+        filename += ".qcow2"
+
+    return filename
+
+
 def checksum(checksum_file: str, filename: str) -> str:
     try:
         with open(checksum_file, "r") as f:
@@ -42,4 +49,5 @@ class FilterModule(object):
     def filters(self):
         return {
             "checksum": checksum,
+            "qcow2_image_name": qcow2_image_name,
         }
