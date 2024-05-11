@@ -70,15 +70,10 @@ class LookupModule(LookupBase):
 
         cloud_image = self.cloud_images[image_name]
 
-        filename = cloud_image.image
-
-        if not filename.endswith(".qcow2"):
-            filename += ".qcow2"
-
         properties = {
             "checksum_url": f"{cloud_image.url}/{cloud_image.checksum}",
             "image_url": f"{cloud_image.url}/{cloud_image.image}",
-            "filename": filename,
+            "filename": cloud_image.image,
         }
 
         return [properties]
