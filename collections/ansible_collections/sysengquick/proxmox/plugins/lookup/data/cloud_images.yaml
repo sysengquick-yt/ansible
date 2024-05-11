@@ -1,0 +1,7 @@
+---
+cloud_images:
+  fedora-40: &fedora
+    url: https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images
+    checksum: Fedora-Cloud-40-1.14-x86_64-CHECKSUM
+    image: Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2
+  fedora: *fedora
