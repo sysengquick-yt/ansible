@@ -24,22 +24,11 @@
 
     - name: Download cloud image
       ansible.builtin.get_url:
-        dest: "{{ cloud_image_dest }}/{{ image['filename'] }}"
+        dest: "{{ cloud_image_dest }}/{{ image['filename'] | sysengquick.proxmox.qcow2_image_name }}"
         mode: "0644"
         url: "{{ image['image_url'] }}"
-        checksum: "{{ checksum }}"
+        checksum: "{{ tempfile.path | sysengquick.proxmox.checksum(image['filename']) }}"
       become: true
-      vars:
-        checksum: |-
-          {{
-            lookup('ansible.builtin.file', tempfile.path)
-            | ansible.builtin.regex_search(regex)
-            | ansible.builtin.regex_replace(regex, replace)
-          }}
-        regex: |-
-          SHA(256|512) \({{ image['filename'] }}\) = ([a-f0-9]+)
-        replace: |-
-          sha\1:\2
   always:
     - name: Delete tempfile
       ansible.builtin.file:

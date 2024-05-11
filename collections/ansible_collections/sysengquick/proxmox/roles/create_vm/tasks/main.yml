@@ -39,7 +39,7 @@
       scsi0: "{{ values['disk']['storage'] }}:0,\
         import-from={{ values['disk']['image']['storage'] }}\
         :{{ values['disk']['image']['vmid'] }}\
-        /{{ image['filename'] }},\
+        /{{ image['filename'] | sysengquick.proxmox.qcow2_image_name }},\
         format={{ values['disk']['format'] }},\
         iothread={{ values['disk']['iothread'] }},\
         discard={{ values['disk']['discard'] }},\
