@@ -13,6 +13,7 @@ create_vm_values_defaults:
     discard: "on"
     format: qcow2
     image:
+      name: "{{ global_cloud_image_name | default('ubuntu') }}"
       storage: local
       vmid: 0
     iothread: 1

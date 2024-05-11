@@ -1,8 +1,3 @@
 ---
 cloud_image_dest: /var/lib/vz/images/0
-cloud_image_url_base: |-
-  https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images
-cloud_image_file_checksum: |-
-  Fedora-Cloud-40-1.14-x86_64-CHECKSUM
-cloud_image_file: |-
-  Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2
+cloud_image_name: "{{ global_cloud_image_name | default('ubuntu') }}"

@@ -101,10 +101,19 @@ argument_specs:
                 required: true
                 description: The image properties for this disk
                 options:
-                  file:
+                  name:
                     type: str
-                    required: true
-                    description: The disk image filename
+                    choices:
+                      - fedora
+                      - fedora-40
+                      - rocky
+                      - rocky-9.4
+                      - ubuntu
+                      - ubuntu-24.04
+                      - ubuntu-noble
+                    default: ubuntu
+                    description: The cloud_image name
+                    required: false
                   storage:
                     type: str
                     required: false

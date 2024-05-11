@@ -7,6 +7,8 @@
   become: true
 
 - name: Delete temp file at the end of the block
+  vars:
+    image: "{{ lookup('sysengquick.proxmox.cloud_image', cloud_image_name) }}"
   block:
     - name: Create tempfile
       ansible.builtin.tempfile:
@@ -16,15 +18,15 @@
       ansible.builtin.get_url:
         dest: "{{ tempfile.path }}"
         mode: "0644"
-        url: "{{ cloud_image_url_checksum }}"
+        url: "{{ image['checksum_url'] }}"
       delegate_to: localhost
       run_once: true
 
     - name: Download cloud image
       ansible.builtin.get_url:
-        dest: "{{ cloud_image_dest }}/{{ cloud_image_file }}"
+        dest: "{{ cloud_image_dest }}/{{ image['filename'] }}"
         mode: "0644"
-        url: "{{ cloud_image_url }}"
+        url: "{{ image['image_url'] }}"
         checksum: "{{ checksum }}"
       become: true
       vars:
@@ -35,7 +37,7 @@
             | ansible.builtin.regex_replace(regex, replace)
           }}
         regex: |-
-          SHA(256|512) \({{ cloud_image_file }}\) = ([a-f0-9]+)
+          SHA(256|512) \({{ image['filename'] }}\) = ([a-f0-9]+)
         replace: |-
           sha\1:\2
   always:

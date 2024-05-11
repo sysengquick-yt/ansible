@@ -39,7 +39,7 @@
       scsi0: "{{ values['disk']['storage'] }}:0,\
         import-from={{ values['disk']['image']['storage'] }}\
         :{{ values['disk']['image']['vmid'] }}\
-        /{{ values['disk']['image']['file'] }},\
+        /{{ image['filename'] }},\
         format={{ values['disk']['format'] }},\
         iothread={{ values['disk']['iothread'] }},\
         discard={{ values['disk']['discard'] }},\
@@ -51,6 +51,7 @@
     vga: serial0
   register: result
   vars:
+    image: "{{ lookup('sysengquick.proxmox.cloud_image', values['disk']['image']['name']) }}"
     values: "{{ create_vm_values_combined }}"
 
 - name: Save vmid
