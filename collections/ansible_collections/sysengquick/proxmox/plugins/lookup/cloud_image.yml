@@ -1,0 +1,57 @@
+---
+DOCUMENTATION:
+  name: sysengquick.proxmox.cloud_image
+  author: John Ratliff <john@technoplaza.net>
+  short_description: find cloud_image data
+  description: Lookup cloud image data properties
+  options:
+    _terms:
+      description: Name of image distro to lookup
+      required: true
+      choices:
+        - alma
+        - alma-8
+        - alma-9
+        - centos
+        - centos-8
+        - centos-9
+        - debian
+        - debian-12
+        - fedora
+        - fedora-40
+        - rocky
+        - rocky-8
+        - rocky-9
+        - ubuntu
+        - ubuntu-22.04
+        - ubuntu-24.04
+        - ubuntu-jammy
+        - ubuntu-noble
+        - ubuntu-minimal
+        - ubuntu-minimal-jammy
+        - ubuntu-minimal-noble
+
+EXAMPLES: |
+  - name: Display image properties for newest debian image
+    ansible.builtin.debug:
+      msg:
+        - 'Image URL = {{ image.image_url }}'
+        - 'Checksum URL = {{ image.checksum_url }}'
+        - 'Filename = {{ image.filename }}'
+    vars:
+      image: "{{ lookup('sysengquick.proxmox.cloud_image', 'debian') }}"
+
+RETURN:
+  _raw:
+    description: Looked up image properties
+    type: dict
+    options:
+      image_url:
+        type: str
+        description: The full URL to the image file on the server
+      checksum_url:
+        type: str
+        description: The full URL to the checksum file to validate unmodified downloads
+      filename:
+        type: str
+        description: Filename for the image ending in .qcow2 suitable for proxmox
