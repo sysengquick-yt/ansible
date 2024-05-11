@@ -38,15 +38,14 @@ class LookupModule(LookupBase):
             try:
                 with open(filename, "r") as f:
                     data = yaml.safe_load(f)
-            except IOError:
-                raise AnsibleError(
-                    f"Unable to load cloud image files data from {filename}"
-                )
-            except yaml.YAMLError:
-                raise AnsibleError(f"Unable to parse yaml from {filename}")
 
-            try:
                 cls.cloud_images = CloudImagesModel(**data).cloud_images
+            except IOError as e:
+                raise AnsibleError(
+                    f"Unable to load cloud image files data from {filename}", orig_exc=e
+                )
+            except yaml.YAMLError as e:
+                raise AnsibleError(f"Unable to parse yaml from {filename}", orig_exc=e)
             except ValidationError as e:
                 raise AnsibleError(
                     f"Unable to validate cloud image file data in {filename}",
