@@ -13,7 +13,7 @@
   vars:
     global_cloud_image_name: fedora
     cloud_image_dest: /tank/nas/proxmox/images/0
-    create_vm_api:
+    global_proxmox_api:
       host: pve.local.technoplaza.net
       user: root@pam
       token_id: ansible

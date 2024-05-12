@@ -1,55 +1,60 @@
 ---
-- name: Register values
+- name: Register combined arguments
   ansible.builtin.set_fact:
     create_vm_values_combined: |
       {{
         create_vm_values_defaults
         | ansible.builtin.combine(create_vm_values, recursive=true)
       }}
+    create_vm_api_combined: |
+      {{
+        create_vm_api_defaults
+        | ansible.builtin.combine(create_vm_api, recursive=true)
+      }}
 
 - name: Create cloud VM
   community.general.proxmox_kvm:
-    api_host: "{{ create_vm_api['host'] }}"
-    api_user: "{{ create_vm_api['user'] }}"
-    api_token_id: "{{ create_vm_api['token_id'] }}"
-    api_token_secret: "{{ create_vm_api['token_secret'] }}"
-    validate_certs: "{{ create_vm_validate_certs }}"
-    name: "{{ values['name'] }}"
+    api_host: "{{ create_vm_api_combined['host'] }}"
+    api_user: "{{ create_vm_api_combined['user'] }}"
+    api_token_id: "{{ create_vm_api_combined['token_id'] }}"
+    api_token_secret: "{{ create_vm_api_combined['token_secret'] }}"
+    validate_certs: "{{ create_vm_api_combined['validate_certs'] }}"
+    name: "{{ create_vm_values_combined['name'] }}"
     agent: enabled=1
-    balloon: "{{ values['balloon'] }}"
+    balloon: "{{ create_vm_values_combined['balloon'] }}"
     boot: order=scsi0
-    cipassword: "{{ values['cloud_init']['password'] }}"
-    ciuser: "{{ values['cloud_init']['user'] }}"
-    cores: "{{ values['cpu_cores'] }}"
-    cpu: "{{ values['cpu_type'] }}"
+    cipassword: "{{ create_vm_values_combined['cloud_init']['password'] }}"
+    ciuser: "{{ create_vm_values_combined['cloud_init']['user'] }}"
+    cores: "{{ create_vm_values_combined['cpu_cores'] }}"
+    cpu: "{{ create_vm_values_combined['cpu_type'] }}"
     ide:
-      ide2: "{{ values['cloud_init']['storage'] }}:cloudinit,\
-        format={{ values['cloud_init']['format'] }}"
+      ide2:
+        "{{ create_vm_values_combined['cloud_init']['storage'] }}:cloudinit,\
+        format={{ create_vm_values_combined['cloud_init']['format'] }}"
     ipconfig: "{{ network_config['ipconfig'] }}"
-    memory: "{{ values['memory'] }}"
+    memory: "{{ create_vm_values_combined['memory'] }}"
     net: "{{ network_config['network'] }}"
-    node: "{{ values['node'] }}"
-    onboot: "{{ values['onboot'] }}"
+    node: "{{ create_vm_values_combined['node'] }}"
+    onboot: "{{ create_vm_values_combined['onboot'] }}"
     ostype: l26
     scsi:
-      scsi0: "{{ values['disk']['storage'] }}:0,\
-        import-from={{ values['disk']['image']['storage'] }}\
-        :{{ values['disk']['image']['vmid'] }}\
+      scsi0: "{{ create_vm_values_combined['disk']['storage'] }}:0,\
+        import-from={{ create_vm_values_combined['disk']['image']['storage'] }}\
+        :{{ create_vm_values_combined['disk']['image']['vmid'] }}\
         /{{ image['filename'] | sysengquick.proxmox.qcow2_image_name }},\
-        format={{ values['disk']['format'] }},\
-        iothread={{ values['disk']['iothread'] }},\
-        discard={{ values['disk']['discard'] }},\
-        ssd={{ values['disk']['ssd'] }}"
+        format={{ create_vm_values_combined['disk']['format'] }},\
+        iothread={{ create_vm_values_combined['disk']['iothread'] }},\
+        discard={{ create_vm_values_combined['disk']['discard'] }},\
+        ssd={{ create_vm_values_combined['disk']['ssd'] }}"
     scsihw: virtio-scsi-single
     serial:
       serial0: socket
-    sshkeys: "{{ values['cloud_init']['sshkeys'] }}"
+    sshkeys: "{{ create_vm_values_combined['cloud_init']['sshkeys'] }}"
     vga: serial0
   register: result
   vars:
-    image: "{{ lookup('sysengquick.proxmox.cloud_image', values['disk']['image']['name']) }}"
-    network_config: "{{ values['network'] | sysengquick.proxmox.network_config }}"
-    values: "{{ create_vm_values_combined }}"
+    image: "{{ lookup('sysengquick.proxmox.cloud_image', create_vm_values_combined['disk']['image']['name']) }}"
+    network_config: "{{ create_vm_values_combined['network'] | sysengquick.proxmox.network_config }}"
 
 - name: Save vmid
   ansible.builtin.set_fact:
@@ -57,25 +62,23 @@
 
 - name: Resize disk
   community.general.proxmox_disk:
-    api_host: "{{ create_vm_api['host'] }}"
-    api_user: "{{ create_vm_api['user'] }}"
-    api_token_id: "{{ create_vm_api['token_id'] }}"
-    api_token_secret: "{{ create_vm_api['token_secret'] }}"
-    validate_certs: "{{ create_vm_validate_certs }}"
+    api_host: "{{ create_vm_api_combined['host'] }}"
+    api_user: "{{ create_vm_api_combined['user'] }}"
+    api_token_id: "{{ create_vm_api_combined['token_id'] }}"
+    api_token_secret: "{{ create_vm_api_combined['token_secret'] }}"
+    validate_certs: "{{ create_vm_api_combined['validate_certs'] }}"
     disk: scsi0
     vmid: "{{ proxmox_vmid }}"
-    size: "{{ values['disk']['size'] }}G"
+    size: "{{ create_vm_values_combined['disk']['size'] }}G"
     state: resized
-  vars:
-    values: "{{ create_vm_values_combined }}"
 
 - name: Start the VM
   community.general.proxmox_kvm:
-    api_host: "{{ create_vm_api['host'] }}"
-    api_user: "{{ create_vm_api['user'] }}"
-    api_token_id: "{{ create_vm_api['token_id'] }}"
-    api_token_secret: "{{ create_vm_api['token_secret'] }}"
-    validate_certs: "{{ create_vm_validate_certs }}"
+    api_host: "{{ create_vm_api_combined['host'] }}"
+    api_user: "{{ create_vm_api_combined['user'] }}"
+    api_token_id: "{{ create_vm_api_combined['token_id'] }}"
+    api_token_secret: "{{ create_vm_api_combined['token_secret'] }}"
+    validate_certs: "{{ create_vm_api_combined['validate_certs'] }}"
     state: started
     vmid: "{{ proxmox_vmid }}"
   when: create_vm_start

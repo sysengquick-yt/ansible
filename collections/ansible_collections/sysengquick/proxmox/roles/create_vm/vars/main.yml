@@ -1,5 +1,6 @@
 ---
-create_vm_validate_certs: "{{ create_vm_api['validate_certs'] | default(true) }}"
+create_vm_api_defaults:
+  validate_certs: true
 create_vm_values_defaults:
   balloon: 0
   cloud_init:
