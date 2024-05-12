@@ -1,0 +1,6 @@
+---
+- name: Configure ip forwarding on IPv4
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+  become: true

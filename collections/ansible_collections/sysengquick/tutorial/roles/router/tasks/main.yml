@@ -1,0 +1,12 @@
+---
+- name: Install nftables
+  ansible.builtin.import_tasks: install.yml
+
+- name: Configure nftables
+  ansible.builtin.import_tasks: config.yml
+
+- name: Enable nftables service
+  ansible.builtin.import_tasks: service.yml
+
+- name: Configure sysctl
+  ansible.builtin.import_tasks: sysctl.yml

@@ -1,0 +1,25 @@
+flush ruleset
+
+table ip filter {
+    chain input {
+        type filter hook input priority filter + 20; policy drop;
+
+        iifname lo accept
+        ct state vmap {established: accept, related: accept, invalid: drop}
+        icmp type echo-request limit rate 5/second accept
+        tcp dport ssh accept
+    }
+
+    chain forward {
+        type filter hook forward priority filter + 20; policy drop;
+
+        ct state vmap {established: accept, related: accept, invalid: drop}
+        iifname {{ router_iface_lan }} accept
+    }
+
+    chain output {
+        type filter hook output priority filter + 20; policy accept;
+    }
+}
+
+include "/etc/nftables/nat.nft"

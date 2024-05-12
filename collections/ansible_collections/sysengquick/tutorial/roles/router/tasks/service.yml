@@ -1,0 +1,7 @@
+---
+- name: Enable nftables service
+  ansible.builtin.service:
+    name: nftables
+    enabled: true
+    state: started
+  become: true

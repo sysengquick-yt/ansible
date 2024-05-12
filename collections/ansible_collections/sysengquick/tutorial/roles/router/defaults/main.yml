@@ -1,0 +1,3 @@
+---
+router_iface_lan: eth1
+router_iface_wan: eth0

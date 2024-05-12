@@ -1,0 +1,11 @@
+table ip nat {
+    chain prerouting {
+        type nat hook prerouting priority filter + 20; policy accept;
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority srcnat + 20; policy accept;
+
+        oifname {{ router_iface_wan }} masquerade
+    }
+}

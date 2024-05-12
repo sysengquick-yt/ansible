@@ -1,0 +1,5 @@
+---
+- name: Install nftables
+  ansible.builtin.package:
+    name: nftables
+  become: true

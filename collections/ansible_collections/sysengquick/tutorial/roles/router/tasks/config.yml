@@ -1,0 +1,22 @@
+---
+- name: Become root
+  become: true
+  notify: Restart nftables
+  block:
+    - name: Configure nftables.conf
+      ansible.builtin.copy:
+        src: etc/sysconfig/nftables.conf
+        dest: /etc/sysconfig/nftables.conf
+        mode: "0600"
+
+    - name: Configure main.nft
+      ansible.builtin.template:
+        src: main.nft.j2
+        dest: /etc/nftables/main.nft
+        mode: "0700"
+
+    - name: Configure nat.nft
+      ansible.builtin.template:
+        src: nat.nft.j2
+        dest: /etc/nftables/nat.nft
+        mode: "0700"
