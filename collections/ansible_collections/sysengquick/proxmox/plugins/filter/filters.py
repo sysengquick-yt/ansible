@@ -4,15 +4,9 @@
 from __future__ import annotations
 
 import re
+from typing import Dict, List
 
 from ansible.errors import AnsibleFilterError
-
-
-def qcow2_image_name(filename: str) -> str:
-    if not filename.endswith(".qcow2"):
-        filename += ".qcow2"
-
-    return filename
 
 
 def checksum(checksum_file: str, filename: str) -> str:
@@ -45,9 +39,51 @@ def checksum(checksum_file: str, filename: str) -> str:
     )
 
 
+def network_config(networks: List[Dict[str, str | int]]) -> Dict[str, Dict[str, str]]:
+    def helper(*args, **kwargs) -> str:
+        return (
+            f"model={kwargs['model']},"
+            f"bridge={kwargs['bridge']},"
+            f"firewall={kwargs['firewall']},"
+            f"mtu={kwargs['mtu']}"
+        )
+
+    defaults = {
+        "ipconfig": "ip=dhcp",
+        "model": "virtio",
+        "bridge": "vmbr0",
+        "firewall": 0,
+        "mtu": 1,
+    }
+
+    ret = {
+        "ipconfig": {
+            "ipconfig0": defaults["ipconfig"],
+        },
+        "network": {
+            "net0": helper(**defaults),
+        },
+    }
+
+    for index, network in enumerate(networks):
+        values = defaults | network
+        ret["ipconfig"][f"ipconfig{index}"] = values["ipconfig"]
+        ret["network"][f"net{index}"] = helper(**values)
+
+    return ret
+
+
+def qcow2_image_name(filename: str) -> str:
+    if not filename.endswith(".qcow2"):
+        filename += ".qcow2"
+
+    return filename
+
+
 class FilterModule(object):
     def filters(self):
         return {
             "checksum": checksum,
+            "network_config": network_config,
             "qcow2_image_name": qcow2_image_name,
         }
