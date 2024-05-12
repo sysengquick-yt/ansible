@@ -6,11 +6,6 @@ argument_specs:
     author:
       - John Ratliff <john@technoplaza.net>
     options:
-      cloud_image_dest:
-        type: str
-        default: /var/lib/vz/images/0
-        description: Path to store the cloud image files
-        required: false
       cloud_image_name:
         type: str
         choices:
@@ -38,4 +33,35 @@ argument_specs:
           - ubuntu-minimal-noble
         default: ubuntu
         description: Cloud image name to download
+        required: false
+      cloud_image_api_proxmox:
+        type: dict
+        required: true
+        description: The proxmox API settings
+        options:
+          host:
+            type: str
+            required: true
+            description: The proxmox API host
+          user:
+            type: str
+            required: true
+            description: The user associated with the API token
+          token_id:
+            type: str
+            required: true
+            description: The token ID
+          token_secret:
+            type: str
+            required: true
+            description: The API token
+          validate_certs:
+            type: bool
+            default: true
+            description: True to validate the proxmox API cert; false to bypass validation (useful for self-signed certs)
+            required: false
+      cloud_image_storage_id:
+        type: str
+        default: local
+        description: The proxmox storage pool ID to place the image
         required: false

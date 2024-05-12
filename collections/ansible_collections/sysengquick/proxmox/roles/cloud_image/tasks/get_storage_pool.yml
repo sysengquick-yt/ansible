@@ -1,0 +1,27 @@
+---
+- name: Fetch proxmox storage info
+  ansible.builtin.import_role:
+    name: sysengquick.proxmox.api
+    tasks_from: storage_path
+  delegate_to: localhost
+  vars:
+    api_storage_path_id: "{{ cloud_image_storage_id }}"
+
+- name: Assert storage pool is of type dir
+  ansible.builtin.assert:
+    that: type == 'dir'
+    fail_msg: "Storage pool '{{ api_storage_path_id }}' is of type {{ type }}, but only type 'dir' is supported"
+  vars:
+    type: "{{ result['proxmox_storages'][0]['type'] }}"
+
+- name: Assert storage pool can storage images
+  ansible.builtin.assert:
+    that: |
+      'images' is in content
+    fail_msg: "Storage pool '{{ api_storage_path_id }}' must include 'images' support. Found {{ content }}"
+  vars:
+    content: "{{ result['proxmox_storages'][0]['content'] }}"
+
+- name: Register cloud_image_dest
+  ansible.builtin.set_fact:
+    cloud_image_dest: "{{ result['proxmox_storages'][0]['path'] }}/images/0"

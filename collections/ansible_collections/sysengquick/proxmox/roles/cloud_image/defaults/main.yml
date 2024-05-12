@@ -1,3 +1,4 @@
 ---
-cloud_image_dest: /var/lib/vz/images/0
 cloud_image_name: "{{ global_cloud_image_name | default('ubuntu') }}"
+cloud_image_api_proxmox: "{{ global_proxmox_api | default({}) }}"
+cloud_image_storage_id: local

@@ -1,4 +1,7 @@
 ---
+- name: Get storage pool directory
+  ansible.builtin.import_tasks: get_storage_pool.yml
+
 - name: Create image directory
   ansible.builtin.file:
     state: directory
