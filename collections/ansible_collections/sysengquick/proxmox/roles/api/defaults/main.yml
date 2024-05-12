@@ -1,0 +1,3 @@
+---
+api_proxmox: "{{ global_proxmox_api | default({}) }}"
+api_create_vm_start: true

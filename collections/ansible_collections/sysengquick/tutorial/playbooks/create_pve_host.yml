@@ -12,13 +12,13 @@
   ansible.builtin.import_playbook: sysengquick.proxmox.create_cloud_vm
   vars:
     global_cloud_image_name: fedora
-    cloud_image_dest: /tank/nas/proxmox/images/0
     global_proxmox_api:
       host: pve.local.technoplaza.net
       user: root@pam
       token_id: ansible
       token_secret: "{{ vault.proxmox_api.token_secret }}"
-    create_vm_values:
+    cloud_image_dest: /tank/nas/proxmox/images/0
+    api_create_vm_values:
       name: proxy.ath.local.technoplaza.net
       cloud_init:
         sshkeys: |

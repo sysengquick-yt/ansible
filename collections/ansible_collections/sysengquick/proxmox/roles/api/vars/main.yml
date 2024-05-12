@@ -1,7 +1,7 @@
 ---
-create_vm_api_defaults:
+api_proxmox_defaults:
   validate_certs: true
-create_vm_values_defaults:
+api_create_vm_values_defaults:
   balloon: 0
   cloud_init:
     format: qcow2

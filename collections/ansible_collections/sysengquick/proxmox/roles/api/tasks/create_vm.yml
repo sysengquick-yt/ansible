@@ -1,0 +1,84 @@
+---
+- name: Register combined arguments
+  ansible.builtin.set_fact:
+    api_create_vm_values_combined: |
+      {{
+        api_create_vm_values_defaults
+        | ansible.builtin.combine(api_create_vm_values, recursive=true)
+      }}
+    api_proxmox_combined: |
+      {{
+        api_proxmox_defaults
+        | ansible.builtin.combine(api_proxmox, recursive=true)
+      }}
+
+- name: Create cloud VM
+  community.general.proxmox_kvm:
+    api_host: "{{ api_proxmox_combined['host'] }}"
+    api_user: "{{ api_proxmox_combined['user'] }}"
+    api_token_id: "{{ api_proxmox_combined['token_id'] }}"
+    api_token_secret: "{{ api_proxmox_combined['token_secret'] }}"
+    validate_certs: "{{ api_proxmox_combined['validate_certs'] }}"
+    name: "{{ api_create_vm_values_combined['name'] }}"
+    agent: enabled=1
+    balloon: "{{ api_create_vm_values_combined['balloon'] }}"
+    boot: order=scsi0
+    cipassword: "{{ api_create_vm_values_combined['cloud_init']['password'] }}"
+    ciuser: "{{ api_create_vm_values_combined['cloud_init']['user'] }}"
+    cores: "{{ api_create_vm_values_combined['cpu_cores'] }}"
+    cpu: "{{ api_create_vm_values_combined['cpu_type'] }}"
+    ide:
+      ide2:
+        "{{ api_create_vm_values_combined['cloud_init']['storage'] }}:cloudinit,\
+        format={{ api_create_vm_values_combined['cloud_init']['format'] }}"
+    ipconfig: "{{ network_config['ipconfig'] }}"
+    memory: "{{ api_create_vm_values_combined['memory'] }}"
+    net: "{{ network_config['network'] }}"
+    node: "{{ api_create_vm_values_combined['node'] }}"
+    onboot: "{{ api_create_vm_values_combined['onboot'] }}"
+    ostype: l26
+    scsi:
+      scsi0: "{{ api_create_vm_values_combined['disk']['storage'] }}:0,\
+        import-from={{ api_create_vm_values_combined['disk']['image']['storage'] }}\
+        :{{ api_create_vm_values_combined['disk']['image']['vmid'] }}\
+        /{{ image['filename'] | sysengquick.proxmox.qcow2_image_name }},\
+        format={{ api_create_vm_values_combined['disk']['format'] }},\
+        iothread={{ api_create_vm_values_combined['disk']['iothread'] }},\
+        discard={{ api_create_vm_values_combined['disk']['discard'] }},\
+        ssd={{ api_create_vm_values_combined['disk']['ssd'] }}"
+    scsihw: virtio-scsi-single
+    serial:
+      serial0: socket
+    sshkeys: "{{ api_create_vm_values_combined['cloud_init']['sshkeys'] }}"
+    vga: serial0
+  register: result
+  vars:
+    image: "{{ lookup('sysengquick.proxmox.cloud_image', api_create_vm_values_combined['disk']['image']['name']) }}"
+    network_config: "{{ api_create_vm_values_combined['network'] | sysengquick.proxmox.network_config }}"
+
+- name: Save vmid
+  ansible.builtin.set_fact:
+    api_proxmox_vmid: "{{ result['vmid'] }}"
+
+- name: Resize disk
+  community.general.proxmox_disk:
+    api_host: "{{ api_proxmox_combined['host'] }}"
+    api_user: "{{ api_proxmox_combined['user'] }}"
+    api_token_id: "{{ api_proxmox_combined['token_id'] }}"
+    api_token_secret: "{{ api_proxmox_combined['token_secret'] }}"
+    validate_certs: "{{ api_proxmox_combined['validate_certs'] }}"
+    disk: scsi0
+    vmid: "{{ api_proxmox_vmid }}"
+    size: "{{ api_create_vm_values_combined['disk']['size'] }}G"
+    state: resized
+
+- name: Start the VM
+  community.general.proxmox_kvm:
+    api_host: "{{ api_proxmox_combined['host'] }}"
+    api_user: "{{ api_proxmox_combined['user'] }}"
+    api_token_id: "{{ api_proxmox_combined['token_id'] }}"
+    api_token_secret: "{{ api_proxmox_combined['token_secret'] }}"
+    validate_certs: "{{ api_proxmox_combined['validate_certs'] }}"
+    state: started
+    vmid: "{{ api_proxmox_vmid }}"
+  when: api_create_vm_start

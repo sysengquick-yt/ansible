@@ -1,3 +1,0 @@
----
-create_vm_api: "{{ global_proxmox_api | default({}) }}"
-create_vm_start: true

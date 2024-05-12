@@ -1,12 +1,12 @@
 ---
 argument_specs:
-  main:
+  create_vm:
     short_description: Creates cloud VM
     description: Creates VM in proxmox VE using cloud image
     author:
       - John Ratliff <john@technplaza.net>
     options:
-      create_vm_api:
+      api_proxmox:
         type: dict
         required: true
         description: The proxmox API settings
@@ -32,12 +32,12 @@ argument_specs:
             default: true
             description: True to validate the proxmox API cert; false to bypass validation (useful for self-signed certs)
             required: false
-      create_vm_start:
+      api_create_vm_start:
         type: bool
         default: true
         description: True will start the VM after creation; false will leave it offline.
         required: false
-      create_vm_values:
+      api_create_vm_values:
         type: dict
         required: true
         description: The parameters to use when configuring the new VM

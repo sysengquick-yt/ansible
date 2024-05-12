@@ -8,11 +8,8 @@
       ansible.builtin.import_role:
         name: sysengquick.proxmox.cloud_image
 
-- name: Create VM on proxmox host
-  hosts: localhost
-  gather_facts: false
-
-  tasks:
     - name: Create VM
       ansible.builtin.import_role:
-        name: sysengquick.proxmox.create_vm
+        name: sysengquick.proxmox.api
+        tasks_from: create_vm
+      delegate_to: localhost
