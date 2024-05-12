@@ -14,7 +14,7 @@ api_create_vm_values_defaults:
   disk: []
   image:
     name: "{{ global_cloud_image_name | default('ubuntu') }}"
-    storage: "{{ global_proxmox_storage_id | default('local') }}"
+    storage: "{{ global_cloud_image_storage | default('local') }}"
   memory: 2048
   network: []
   onboot: false
