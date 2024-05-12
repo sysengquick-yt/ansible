@@ -16,8 +16,7 @@ api_create_vm_values_defaults:
     format: qcow2
     image:
       name: "{{ global_cloud_image_name | default('ubuntu') }}"
-      storage: local
-      vmid: 0
+      storage: "{{ global_proxmox_storage_id | default('local') }}"
     iothread: 1
     size: 8
     ssd: 1

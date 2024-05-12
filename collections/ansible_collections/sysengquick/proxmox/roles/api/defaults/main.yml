@@ -1,4 +1,4 @@
 ---
 api_proxmox: "{{ global_proxmox_api | default({}) }}"
 api_create_vm_start: true
-api_storage_path_id: local
+api_storage_path_id: "{{ global_proxmox_storage_id | default('local') }}"
