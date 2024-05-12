@@ -43,6 +43,7 @@
         "ansibleVault.executable": "/home/vscode/venv/bin/ansible-vault",
         "editor.formatOnSave": true,
         "files.associations": {
+          "*.j2": "ansible-jinja",
           "*.yml": "ansible"
         },
         "files.trimFinalNewlines": true,
