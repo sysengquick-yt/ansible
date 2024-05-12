@@ -1,0 +1,9 @@
+---
+- name: Register api_proxmox_combined
+  ansible.builtin.set_fact:
+    api_proxmox_combined: |
+      {{
+        api_proxmox_defaults
+        | ansible.builtin.combine(api_proxmox, recursive=true)
+      }}
+  when: api_proxmox_combined is not defined

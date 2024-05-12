@@ -1,15 +1,13 @@
 ---
+- name: Register api_proxmox_combined
+  ansible.builtin.import_tasks: get_api_proxmox_combined.yml
+
 - name: Register combined arguments
   ansible.builtin.set_fact:
     api_create_vm_values_combined: |
       {{
         api_create_vm_values_defaults
         | ansible.builtin.combine(api_create_vm_values, recursive=true)
-      }}
-    api_proxmox_combined: |
-      {{
-        api_proxmox_defaults
-        | ansible.builtin.combine(api_proxmox, recursive=true)
       }}
 
 - name: Create cloud VM
