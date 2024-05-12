@@ -22,6 +22,7 @@ argument_specs:
           - centos-9
           - debian
           - debian-12
+          - debian-bookworm
           - fedora
           - fedora-40
           - rocky
