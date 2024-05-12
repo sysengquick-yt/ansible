@@ -1,0 +1,13 @@
+---
+- name: Register api_proxmox_combined
+  ansible.builtin.import_tasks: get_api_proxmox_combined.yml
+
+- name: Fetch storage path information
+  community.general.proxmox_storage_info:
+    api_host: "{{ api_proxmox_combined['host'] }}"
+    api_user: "{{ api_proxmox_combined['user'] }}"
+    api_token_id: "{{ api_proxmox_combined['token_id'] }}"
+    api_token_secret: "{{ api_proxmox_combined['token_secret'] }}"
+    validate_certs: "{{ api_proxmox_combined['validate_certs'] }}"
+    storage: "{{ api_storage_path_id }}"
+  register: result

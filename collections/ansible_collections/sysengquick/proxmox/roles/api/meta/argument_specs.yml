@@ -221,3 +221,40 @@ argument_specs:
             required: false
             default: false
             description: True to start the VM on proxmox boot; false otherwise
+  storage_path:
+    short_description: Lookup storage path
+    description: Use proxmox API to fetch disk image storage path and verify disk images can be stored there
+    author:
+      - John Ratliff <john@technplaza.net>
+    options:
+      api_proxmox:
+        type: dict
+        required: true
+        description: The proxmox API settings
+        options:
+          host:
+            type: str
+            required: true
+            description: The proxmox API host
+          user:
+            type: str
+            required: true
+            description: The user associated with the API token
+          token_id:
+            type: str
+            required: true
+            description: The token ID
+          token_secret:
+            type: str
+            required: true
+            description: The API token
+          validate_certs:
+            type: bool
+            default: true
+            description: True to validate the proxmox API cert; false to bypass validation (useful for self-signed certs)
+            required: false
+      api_storage_path_id:
+        type: str
+        default: local
+        description: Proxmox storage ID to fetch the path for
+        required: false
