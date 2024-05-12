@@ -35,14 +35,14 @@
     node: "{{ api_create_vm_values_combined['node'] }}"
     onboot: "{{ api_create_vm_values_combined['onboot'] }}"
     ostype: l26
-    scsi:
-      scsi0: "{{ api_create_vm_values_combined['disk']['storage'] }}:0,\
-        import-from={{ api_create_vm_values_combined['disk']['image']['storage'] }}:0\
-        /{{ image['filename'] | sysengquick.proxmox.qcow2_image_name }},\
-        format={{ api_create_vm_values_combined['disk']['format'] }},\
-        iothread={{ api_create_vm_values_combined['disk']['iothread'] }},\
-        discard={{ api_create_vm_values_combined['disk']['discard'] }},\
-        ssd={{ api_create_vm_values_combined['disk']['ssd'] }}"
+    scsi: |
+      {{
+        api_create_vm_values_combined['disk']
+        | sysengquick.proxmox.disk_config(
+          image['filename'] | sysengquick.proxmox.qcow2_image_name,
+          api_create_vm_values_combined['image']['storage']
+        )
+      }}
     scsihw: virtio-scsi-single
     serial:
       serial0: socket
@@ -50,7 +50,7 @@
     vga: serial0
   register: result
   vars:
-    image: "{{ lookup('sysengquick.proxmox.cloud_image', api_create_vm_values_combined['disk']['image']['name']) }}"
+    image: "{{ lookup('sysengquick.proxmox.cloud_image', api_create_vm_values_combined['image']['name']) }}"
     network_config: "{{ api_create_vm_values_combined['network'] | sysengquick.proxmox.network_config }}"
 
 - name: Save vmid
@@ -66,7 +66,7 @@
     validate_certs: "{{ api_proxmox_combined['validate_certs'] }}"
     disk: scsi0
     vmid: "{{ api_proxmox_vmid }}"
-    size: "{{ api_create_vm_values_combined['disk']['size'] }}G"
+    size: "{{ api_create_vm_values_combined['disk'][0]['size'] | default(8) }}G"
     state: resized
 
 - name: Start the VM

@@ -90,9 +90,11 @@ argument_specs:
             default: host
             description: The type of CPU to emulate
           disk:
-            type: dict
-            required: true
+            type: list
+            elements: dict
+            default: []
             description: Disk configuration properties
+            required: false
             options:
               discard:
                 type: str
@@ -106,44 +108,6 @@ argument_specs:
                 default: qcow2
                 choices: [qcow2, raw]
                 description: Image type to use for this disk
-              image:
-                type: dict
-                required: false
-                description: The image properties for this disk
-                options:
-                  name:
-                    type: str
-                    choices:
-                      - alma
-                      - alma-8
-                      - alma-9
-                      - centos
-                      - centos-8
-                      - centos-9
-                      - debian
-                      - debian-12
-                      - debian-bookworm
-                      - fedora
-                      - fedora-40
-                      - rocky
-                      - rocky-8
-                      - rocky-9
-                      - ubuntu
-                      - ubuntu-22.04
-                      - ubuntu-24.04
-                      - ubuntu-jammy
-                      - ubuntu-noble
-                      - ubuntu-minimal
-                      - ubuntu-minimal-jammy
-                      - ubuntu-minimal-noble
-                    default: ubuntu
-                    description: The cloud_image name
-                    required: false
-                  storage:
-                    type: str
-                    required: false
-                    default: local
-                    description: ID of proxmox storage to load the disk image from
               iothread:
                 type: int
                 required: false
@@ -166,6 +130,44 @@ argument_specs:
                 required: false
                 default: local
                 description: ID of proxmox storage pool to place the disk
+          image:
+            type: dict
+            required: false
+            description: The image properties for this disk
+            options:
+              name:
+                type: str
+                choices:
+                  - alma
+                  - alma-8
+                  - alma-9
+                  - centos
+                  - centos-8
+                  - centos-9
+                  - debian
+                  - debian-12
+                  - debian-bookworm
+                  - fedora
+                  - fedora-40
+                  - rocky
+                  - rocky-8
+                  - rocky-9
+                  - ubuntu
+                  - ubuntu-22.04
+                  - ubuntu-24.04
+                  - ubuntu-jammy
+                  - ubuntu-noble
+                  - ubuntu-minimal
+                  - ubuntu-minimal-jammy
+                  - ubuntu-minimal-noble
+                default: ubuntu
+                description: The cloud_image name
+                required: false
+              storage:
+                type: str
+                required: false
+                default: local
+                description: ID of proxmox storage to load the disk image from
           memory:
             type: int
             required: false
