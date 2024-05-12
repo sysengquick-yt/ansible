@@ -27,6 +27,11 @@ argument_specs:
             type: str
             required: true
             description: The API token
+      create_vm_start:
+        type: bool
+        default: true
+        description: True will start the VM after creation; false will leave it offline.
+        required: false
       create_vm_values:
         type: dict
         required: true

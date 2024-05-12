@@ -66,3 +66,13 @@
     state: resized
   vars:
     values: "{{ create_vm_values_combined }}"
+
+- name: Start the VM
+  community.general.proxmox_kvm:
+    api_host: "{{ create_vm_api['host'] }}"
+    api_user: "{{ create_vm_api['user'] }}"
+    api_token_id: "{{ create_vm_api['token_id'] }}"
+    api_token_secret: "{{ create_vm_api['token_secret'] }}"
+    state: started
+    vmid: "{{ proxmox_vmid }}"
+  when: create_vm_start
