@@ -27,6 +27,11 @@ argument_specs:
             type: str
             required: true
             description: The API token
+          validate_certs:
+            type: bool
+            default: true
+            description: True to validate the proxmox API cert; false to bypass validation (useful for self-signed certs)
+            required: false
       create_vm_start:
         type: bool
         default: true

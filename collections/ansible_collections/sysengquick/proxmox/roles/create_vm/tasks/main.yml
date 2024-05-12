@@ -13,6 +13,7 @@
     api_user: "{{ create_vm_api['user'] }}"
     api_token_id: "{{ create_vm_api['token_id'] }}"
     api_token_secret: "{{ create_vm_api['token_secret'] }}"
+    validate_certs: "{{ create_vm_validate_certs }}"
     name: "{{ values['name'] }}"
     agent: enabled=1
     balloon: "{{ values['balloon'] }}"
@@ -60,6 +61,7 @@
     api_user: "{{ create_vm_api['user'] }}"
     api_token_id: "{{ create_vm_api['token_id'] }}"
     api_token_secret: "{{ create_vm_api['token_secret'] }}"
+    validate_certs: "{{ create_vm_validate_certs }}"
     disk: scsi0
     vmid: "{{ proxmox_vmid }}"
     size: "{{ values['disk']['size'] }}G"
@@ -73,6 +75,7 @@
     api_user: "{{ create_vm_api['user'] }}"
     api_token_id: "{{ create_vm_api['token_id'] }}"
     api_token_secret: "{{ create_vm_api['token_secret'] }}"
+    validate_certs: "{{ create_vm_validate_certs }}"
     state: started
     vmid: "{{ proxmox_vmid }}"
   when: create_vm_start
