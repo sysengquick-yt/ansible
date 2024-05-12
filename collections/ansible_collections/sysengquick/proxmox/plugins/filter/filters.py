@@ -39,6 +39,62 @@ def checksum(checksum_file: str, filename: str) -> str:
     )
 
 
+def disk_config(
+    disks: List[Dict[str, str | int]], image_file: str, image_storage: str
+) -> Dict[str, str]:
+    def helper(*args, **kwargs) -> str:
+        disk_config = (
+            f"{kwargs['storage']}:{kwargs['size']},"
+            f"discard={kwargs['discard']},"
+            f"format={kwargs['format']},"
+            f"iothread={kwargs['iothread']},"
+            f"ssd={kwargs['ssd']}"
+        )
+
+        if "image" in kwargs:
+            disk_config += (
+                f",import-from={kwargs['image']['storage']}:0/"
+                f"{kwargs['image']['filename']}"
+            )
+
+        return disk_config
+
+    defaults = {
+        "discard": "on",
+        "format": "qcow2",
+        "iothread": 1,
+        "size": 8,
+        "ssd": 1,
+        "storage": "local",
+    }
+
+    first_disk = {}
+
+    if len(disks) > 0:
+        first_disk = disks[0]
+
+    ret = {
+        "scsi0": helper(
+            **(
+                defaults
+                | first_disk
+                | {
+                    "size": 0,
+                    "image": {"storage": image_storage, "filename": image_file},
+                }
+            )
+        )
+    }
+
+    for index, disk in enumerate(disks, start=0):
+        if index == 0:
+            continue
+
+        ret[f"scsi{index}"] = helper(**(defaults | disk))
+
+    return ret
+
+
 def network_config(networks: List[Dict[str, str | int]]) -> Dict[str, Dict[str, str]]:
     def helper(*args, **kwargs) -> str:
         return (
@@ -84,6 +140,7 @@ class FilterModule(object):
     def filters(self):
         return {
             "checksum": checksum,
+            "disk_config": disk_config,
             "network_config": network_config,
             "qcow2_image_name": qcow2_image_name,
         }
