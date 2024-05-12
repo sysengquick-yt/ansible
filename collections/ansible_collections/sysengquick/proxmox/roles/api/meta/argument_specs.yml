@@ -108,7 +108,7 @@ argument_specs:
                 description: Image type to use for this disk
               image:
                 type: dict
-                required: true
+                required: false
                 description: The image properties for this disk
                 options:
                   name:
