@@ -171,7 +171,8 @@ argument_specs:
             required: true
             description: Name to use for the proxmox VM
           network:
-            type: dict
+            type: list
+            elements: dict
             required: false
             description: The network configurations
             options:

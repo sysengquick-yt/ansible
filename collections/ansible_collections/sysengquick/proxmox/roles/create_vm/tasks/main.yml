@@ -24,14 +24,9 @@
     ide:
       ide2: "{{ values['cloud_init']['storage'] }}:cloudinit,\
         format={{ values['cloud_init']['format'] }}"
-    ipconfig:
-      ipconfig0: "{{ values['network']['ipconfig'] }}"
+    ipconfig: "{{ network_config['ipconfig'] }}"
     memory: "{{ values['memory'] }}"
-    net:
-      net0: "model={{ values['network']['model'] }},\
-        bridge={{ values['network']['bridge'] }},\
-        firewall={{ values['network']['firewall'] }},\
-        mtu={{ values['network']['mtu'] }}"
+    net: "{{ network_config['network'] }}"
     node: "{{ values['node'] }}"
     onboot: "{{ values['onboot'] }}"
     ostype: l26
@@ -52,6 +47,7 @@
   register: result
   vars:
     image: "{{ lookup('sysengquick.proxmox.cloud_image', values['disk']['image']['name']) }}"
+    network_config: "{{ values['network'] | sysengquick.proxmox.network_config }}"
     values: "{{ create_vm_values_combined }}"
 
 - name: Save vmid

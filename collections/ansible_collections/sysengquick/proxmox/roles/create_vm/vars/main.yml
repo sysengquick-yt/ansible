@@ -21,10 +21,5 @@ create_vm_values_defaults:
     ssd: 1
     storage: local
   memory: 2048
-  network:
-    ipconfig: ip=dhcp
-    model: virtio
-    bridge: vmbr0
-    firewall: 0
-    mtu: 1
+  network: []
   onboot: false
