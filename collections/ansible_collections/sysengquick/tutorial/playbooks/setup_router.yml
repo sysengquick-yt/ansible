@@ -1,0 +1,9 @@
+---
+- name: Configure VM as router
+  hosts: proxy
+  gather_facts: false
+
+  tasks:
+    - name: Configure router
+      ansible.builtin.import_role:
+        name: sysengquick.tutorial.router
