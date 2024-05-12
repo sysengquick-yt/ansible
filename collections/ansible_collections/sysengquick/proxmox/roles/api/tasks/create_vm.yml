@@ -37,8 +37,7 @@
     ostype: l26
     scsi:
       scsi0: "{{ api_create_vm_values_combined['disk']['storage'] }}:0,\
-        import-from={{ api_create_vm_values_combined['disk']['image']['storage'] }}\
-        :{{ api_create_vm_values_combined['disk']['image']['vmid'] }}\
+        import-from={{ api_create_vm_values_combined['disk']['image']['storage'] }}:0\
         /{{ image['filename'] | sysengquick.proxmox.qcow2_image_name }},\
         format={{ api_create_vm_values_combined['disk']['format'] }},\
         iothread={{ api_create_vm_values_combined['disk']['iothread'] }},\

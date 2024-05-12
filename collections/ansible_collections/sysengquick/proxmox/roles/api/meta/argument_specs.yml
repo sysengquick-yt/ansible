@@ -144,11 +144,6 @@ argument_specs:
                     required: false
                     default: local
                     description: ID of proxmox storage to load the disk image from
-                  vmid:
-                    type: int
-                    required: false
-                    default: 0
-                    description: The VMID associated with the disk image
               iothread:
                 type: int
                 required: false
