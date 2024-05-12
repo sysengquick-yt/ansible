@@ -4,7 +4,7 @@ RUN python3 -m pip install poetry~=1.8.2
 RUN ln -s /usr/share/bash-completion/completions/git /usr/share/bash-completion/bash_completion
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y sshpass vim
+RUN apt-get install -y sshpass vim iputils-ping
 RUN apt-get clean
 
 WORKDIR /workspaces/ansible
