@@ -13,10 +13,10 @@
       ansible.builtin.template:
         src: main.nft.j2
         dest: /etc/nftables/main.nft
-        mode: "0700"
+        mode: "0600"
 
     - name: Configure nat.nft
       ansible.builtin.template:
         src: nat.nft.j2
         dest: /etc/nftables/nat.nft
-        mode: "0700"
+        mode: "0600"
