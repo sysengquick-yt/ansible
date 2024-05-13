@@ -1,0 +1,21 @@
+---
+argument_specs:
+  main:
+    short_description: Configure host to be a router
+    description:
+      - Configures nftable firewall with sane default policy
+      - Adds NAT masquerading rules to handle outbound NAT traffic
+      - Configures sysctl to enable IPv4 packet forwarding
+    author:
+      - John Ratliff <john@technoplaza.net>
+    options:
+      router_iface_lan:
+        type: str
+        default: eth1
+        description: Host interface name for WAN traffic
+        required: false
+      router_iface_wan:
+        type: str
+        default: eth0
+        description: Host interface name for WAN traffic
+        required: false
