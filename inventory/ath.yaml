@@ -6,15 +6,10 @@ all:
         servers:
           hosts:
             arch.ath.local.technoplaza.net:
-              ansible_host: 10.10.10.6
             bookworm.ath.local.technoplaza.net:
-              ansible_host: 10.10.10.2
             centos8.ath.local.technoplaza.net:
-              ansible_host: 10.10.10.5
             jammy.ath.local.technoplaza.net:
-              ansible_host: 10.10.10.4
             rocky9.ath.local.technoplaza.net:
-              ansible_host: 10.10.10.3
           vars:
             ansible_ssh_common_args: "-o ProxyCommand=\
               'ssh -o StrictHostKeyChecking=no \
