@@ -1,6 +1,6 @@
 ---
 DOCUMENTATION:
-  name: sysengquick.proxmox.cloud_image
+  name: cloud_image
   author: John Ratliff <john@technoplaza.net>
   short_description: find cloud_image data
   description: Lookup cloud image data properties
