@@ -1,0 +1,27 @@
+---
+DOCUMENTATION:
+  name: checksum
+  author: John Ratliff <john@technoplaza.net>
+  short_description: Extract checksum from file
+  description: Parse checksum files for SHA algorithm type and checksum
+  options:
+    _input:
+      type: str
+      description: Path to checksum file to parse
+      required: true
+    filename:
+      type: str
+      description: Filename in checksum file to pull checksum for
+      required: true
+
+EXAMPLES: |
+  # Pull checksum for Rocky-8-GenericCloud.latest.x86_64.qcow2 from checksum file in /tmp/CHECKSUMS
+  vars:
+    checksum: "{{ '/tmp/CHECKSUMS' | 'Rocky-8-GenericCloud.latest.x86_64.qcow2' }}"
+
+RETURN:
+  _value:
+    type: str
+    description:
+      - Checksum suitable for use with ansible.bultin.get_url
+      - e.g. sha256:d17f15a7649dd064795306c114b90fc5062e7d5fefa9e9f0bd6b7ce1aeac3ae5

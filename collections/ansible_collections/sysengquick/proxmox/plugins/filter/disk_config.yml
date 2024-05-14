@@ -1,0 +1,40 @@
+---
+DOCUMENTATION:
+  name: disk_config
+  author: John Ratliff <john@technoplaza.net>
+  short_description: Get proxmox disk configuration
+  description: Transform api_create_vm_values.disk for use with proxmox_kvm
+  options:
+    _input:
+      type: list
+      elements: dict
+      description: list of disks from api.create_vm values
+      required: true
+    image_file:
+      type: str
+      description: Name of the image file to use for the first disk
+      required: true
+    image_storage:
+      type: str
+      description: Proxmox storage API where the image exists
+      required: true
+
+EXAMPLES: |
+  # Create cloud VM in proxmox
+  - name: Create cloud VM
+    community.general.proxmox_kvm:
+      scsi: |
+        {{
+          api_create_vm_values_combined['disk']
+          | sysengquick.proxmox.disk_config(
+            image['filename'] | sysengquick.proxmox.qcow2_image_name,
+            api_create_vm_values_combined['image']['storage']
+          )
+        }}
+  vars:
+    image: "{{ lookup('sysengquick.proxmox.cloud_image', api_create_vm_values_combined['image']['name']) }}"
+
+RETURN:
+  _value:
+    type: dict
+    description: SCSI disk dictionary for use with proxmox_kvm module

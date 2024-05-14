@@ -1,0 +1,33 @@
+---
+DOCUMENTATION:
+  name: network_config
+  author: John Ratliff <john@technoplaza.net>
+  short_description: Get proxmox network configuration
+  description: Transform api_create_vm_values.network for use with proxmox_kvm
+  options:
+    _input:
+      type: list
+      elements: dict
+      description: list of networks from api_create_vm_values
+      required: true
+
+EXAMPLES: |
+  # Create cloud VM in proxmox
+  - name: Create cloud VM
+    community.general.proxmox_kvm:
+      ipconfig: "{{ network_config['ipconfig'] }}"
+      net: "{{ network_config['network'] }}"
+  vars:
+    network_config: "{{ api_create_vm_values_combined['network'] | sysengquick.proxmox.network_config }}"
+
+RETURN:
+  _value:
+    type: dict
+    description: Network and ipconfing settings for use with proxmox_kvm
+    options:
+      ipconfig:
+        type: dict
+        description: The ipconfig property for proxmox_kvm
+      network:
+        type: dict
+        description: The net property for proxmox_kvm

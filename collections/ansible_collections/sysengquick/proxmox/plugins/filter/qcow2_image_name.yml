@@ -1,0 +1,24 @@
+---
+DOCUMENTATION:
+  name: qcow2_image_name
+  author: John Ratliff <john@technoplaza.net>
+  short_description: Add .qcow2 to filename
+  description: Ensure .qcow2 extension for a given filename for proxmox
+  options:
+    _input:
+      type: str
+      description: Filename
+      required: true
+
+EXAMPLES: |
+  # Ensure image file has .qcow2 extension for proxmox
+  # ubuntu -> /tmp/noble-server-cloudimg-amd64.img.qcow2 (extension added)
+  # rocky -> /tmp/Rocky-8-GenericCloud.latest.x86_64.qcow2 (extension already exists)
+  vars:
+    ubuntu: "{{ '/tmp/noble-server-cloudimg-amd64.img' | sysengquick.proxmox.qcow2_image_name }}"
+    rocky: "{{ '/tmp/Rocky-8-GenericCloud.latest.x86_64.qcow2' | sysengquick.proxmox.qcow2_image_name }}"
+
+RETURN:
+  _value:
+    type: str
+    description: Filename ending in .qcow2
