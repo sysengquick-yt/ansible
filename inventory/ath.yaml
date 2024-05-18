@@ -1,24 +1,24 @@
 ---
-all:
+ansible:
   children:
     lxc:
       children:
         servers:
           hosts:
-            arch.ath.local.technoplaza.net:
-            bookworm.ath.local.technoplaza.net:
-            centos8.ath.local.technoplaza.net:
-            jammy.ath.local.technoplaza.net:
-            rocky9.ath.local.technoplaza.net:
+            ath-arch.local.technoplaza.net:
+            ath-bookworm.local.technoplaza.net:
+            ath-centos8.local.technoplaza.net:
+            ath-jammy.local.technoplaza.net:
+            ath-rocky9.local.technoplaza.net:
           vars:
             ansible_ssh_common_args: "-o ProxyCommand=\
               'ssh -o StrictHostKeyChecking=no \
               -o UserKnownHostsFile=/dev/null \
-              -W %h:%p ansible@proxy.ath.local.technoplaza.net'"
+              -W %h:%p ansible@ath-proxy.local.technoplaza.net'"
     pve:
       children:
         proxy:
           hosts:
-            proxy.ath.local.technoplaza.net:
+            ath-proxy.local.technoplaza.net:
   vars:
     ansible_user: ansible
