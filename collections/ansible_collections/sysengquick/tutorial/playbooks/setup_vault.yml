@@ -1,0 +1,10 @@
+---
+- name: Configure VM to run HashiCorp Vault in Podman
+  hosts: proxy
+  gather_facts: false
+
+  tasks:
+    - name: Install podman
+      ansible.builtin.import_role:
+        name: sysengquick.tutorial.podman
+        tasks_from: vault
