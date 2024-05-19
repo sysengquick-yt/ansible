@@ -1,0 +1,83 @@
+---
+- name: Install podman
+  ansible.builtin.import_tasks: main.yml
+
+- name: Create non-root user for vault
+  ansible.builtin.import_role:
+    name: sysengquick.tutorial.user
+  vars:
+    user_name: vault
+
+- name: Check vault lingering
+  ansible.builtin.stat:
+    path: "/var/lib/systemd/linger/vault"
+  register: result
+
+- name: Enable lingering for the vault user
+  ansible.builtin.command:
+    cmd: loginctl enable-linger vault
+  become: true
+  changed_when: true
+  when: not result.stat.exists
+
+- name: Lookup user's home directory
+  sysengquick.tutorial.user_info:
+    username: vault
+  register: result
+
+- name: Register data directory
+  ansible.builtin.set_fact:
+    vault_data_dir: "{{ result['user_info']['home'] }}/data"
+
+- name: Run tasks as vault user
+  become: true
+  become_user: vault
+  block:
+    - name: Create config directories
+      ansible.builtin.file:
+        state: directory
+        mode: "0755"
+        path: "{{ item }}"
+      loop:
+        - "{{ vault_data_dir }}"
+        - "{{ vault_data_dir }}/config"
+        - "{{ vault_data_dir }}/file"
+        - "{{ vault_data_dir }}/logs"
+      notify: Update vault config dir perms
+
+    - name: Copy config file
+      ansible.builtin.copy:
+        src: vault/server.json
+        dest: "{{ vault_data_dir }}/config/server.json"
+        mode: "0644"
+      notify: Restart hashicorp-vault service
+
+    - name: Pull hashicorp vault container image
+      containers.podman.podman_image:
+        name: docker.io/hashicorp/vault
+
+    - name: Create HashiCorp Vault quadlet
+      containers.podman.podman_container:
+        name: hashicorp-vault
+        image: hashicorp/vault:latest
+        state: quadlet
+        command: server -config=/data/config/server.json
+        ports:
+          - 8200:8200/tcp
+        volumes:
+          - "{{ vault_data_dir }}:/data:Z"
+        quadlet_options:
+          - |
+            [Install]
+            WantedBy=default.target
+      notify: Reload systemd daemon for vault user
+
+- name: Add nftables fw rules for hashicorp-vault
+  ansible.builtin.copy:
+    src: "{{ file }}"
+    dest: "/{{ file }}"
+    mode: "0600"
+  become: true
+  notify: Restart nftables
+  vars:
+    file: etc/nftables/rules.d/hashicorp-vault.nft

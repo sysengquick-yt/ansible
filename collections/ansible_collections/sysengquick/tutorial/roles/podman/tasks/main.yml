@@ -1,0 +1,19 @@
+---
+- name: Become root
+  become: true
+  block:
+    - name: Install podman packages
+      ansible.builtin.package:
+        name:
+          - acl
+          - podman
+          - systemd-container
+        update_cache: true
+
+    - name: Add polkit rule for machinectl
+      ansible.builtin.copy:
+        src: "{{ file }}"
+        dest: "/{{ file }}"
+        mode: "0644"
+      vars:
+        file: etc/polkit-1/rules.d/60-machinectl-wheel.rules

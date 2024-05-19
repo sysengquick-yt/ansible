@@ -1,0 +1,39 @@
+---
+- name: Update vault config dir perms
+  ansible.builtin.file:
+    state: directory
+    mode: "0755"
+    path: "{{ item }}"
+    owner: 100
+    group: 1000
+  become: true
+  become_user: vault
+  become_method: containers.podman.podman_unshare
+  loop:
+    - "{{ vault_data_dir }}/file"
+    - "{{ vault_data_dir }}/logs"
+
+- name: Reload systemd daemon for vault user
+  ansible.builtin.systemd:
+    name: hashicorp-vault
+    enabled: true
+    daemon_reload: true
+    scope: user
+  become: true
+  become_user: vault
+  become_method: community.general.machinectl
+
+- name: Restart hashicorp-vault service
+  ansible.builtin.systemd:
+    name: hashicorp-vault
+    scope: user
+    state: restarted
+  become: true
+  become_user: vault
+  become_method: community.general.machinectl
+
+- name: Restart nftables
+  ansible.builtin.service:
+    name: nftables
+    state: restarted
+  become: true

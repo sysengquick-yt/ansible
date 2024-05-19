@@ -1,0 +1,5 @@
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.machine1.host-shell" && subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+});
