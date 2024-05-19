@@ -3,6 +3,12 @@
   become: true
   notify: Restart nftables
   block:
+    - name: Create rules.d directory
+      ansible.builtin.file:
+        path: /etc/nftables/rules.d
+        state: directory
+        mode: "0700"
+
     - name: Configure nftables.conf
       ansible.builtin.copy:
         src: etc/sysconfig/nftables.conf
