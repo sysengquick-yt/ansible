@@ -42,6 +42,7 @@ tags: [linux]
 dependencies:
   ansible.posix: ">=1.5.4,<1.6.0"
   community.general: ">=8.6.0,<8.7.0"
+  containers.podman: ">=1.13.0,<=1.14.0"
 
 # The URL of the originating SCM repository
 repository: https://github.com/sysengquick-yt/ansible
