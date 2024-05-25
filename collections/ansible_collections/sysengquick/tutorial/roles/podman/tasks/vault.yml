@@ -2,6 +2,11 @@
 - name: Install podman
   ansible.builtin.import_tasks: main.yml
 
+- name: Install cryptography python library
+  ansible.builtin.package:
+    name: python3-cryptography
+  become: true
+
 - name: Create non-root user for vault
   ansible.builtin.import_role:
     name: sysengquick.tutorial.user
@@ -43,14 +48,28 @@
         - "{{ vault_data_dir }}/config"
         - "{{ vault_data_dir }}/file"
         - "{{ vault_data_dir }}/logs"
+        - "{{ vault_data_dir }}/tls"
       notify: Update vault config dir perms
 
-    - name: Copy config file
-      ansible.builtin.copy:
-        src: vault/server.json
-        dest: "{{ vault_data_dir }}/config/server.json"
-        mode: "0644"
+    - name: Restart hashicorp-vault
       notify: Restart hashicorp-vault service
+      block:
+        - name: Copy config file
+          ansible.builtin.copy:
+            src: vault/server.json
+            dest: "{{ vault_data_dir }}/config/server.json"
+            mode: "0644"
+
+        - name: Create private key for TLS certificate
+          community.crypto.openssl_privatekey:
+            path: "{{ vault_data_dir }}/tls/cert.key.pem"
+          notify: Update TLS private key perms
+
+        - name: Create TLS certificate
+          community.crypto.x509_certificate:
+            path: "{{ vault_data_dir }}/tls/cert.pem"
+            privatekey_path: "{{ vault_data_dir }}/tls/cert.key.pem"
+            provider: selfsigned
 
     - name: Pull hashicorp vault container image
       containers.podman.podman_image:

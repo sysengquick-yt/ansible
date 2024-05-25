@@ -1,0 +1,31 @@
+---
+- name: Test HashiCorp Vault with Ansible
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    # - name: Fetch proxmox secret from vault
+    #   community.hashi_vault.vault_kv2_get:
+    #     path: proxmox
+    #   register: result
+
+    # - name: Add root token to our proxmox secret
+    #   community.hashi_vault.vault_kv2_write:
+    #     path: proxmox
+    #     data: |-
+    #       {{
+    #         result.secret
+    #         | ansible.builtin.combine(values)
+    #       }}
+    #   vars:
+    #     values:
+    #       user: root@pam
+
+    - name: Fetch proxmox secret from vault
+      community.hashi_vault.vault_kv2_get:
+        path: proxmox
+      register: result
+
+    - name: Display proxmox secret
+      ansible.builtin.debug:
+        var: result
