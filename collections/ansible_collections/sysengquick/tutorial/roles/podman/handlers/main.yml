@@ -13,6 +13,16 @@
     - "{{ vault_data_dir }}/file"
     - "{{ vault_data_dir }}/logs"
 
+- name: Update TLS private key perms
+  ansible.builtin.file:
+    state: file
+    mode: "0640"
+    path: "{{ vault_data_dir }}/tls/cert.key.pem"
+    group: 1000
+  become: true
+  become_user: vault
+  become_method: containers.podman.podman_unshare
+
 - name: Reload systemd daemon for vault user
   ansible.builtin.systemd:
     name: hashicorp-vault
