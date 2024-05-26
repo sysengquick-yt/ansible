@@ -30,6 +30,8 @@ WORKDIR /workspaces/ansible
 
 # make prompt multiline cause it's too long by default
 RUN sed -i -E -e '/PS1="\$/c\    PS1=" ${userpart} ${lightblue}\\w ${gitbranch}${removecolor}\\n\\$ "' ~/.bashrc
+RUN echo 'export VAULT_ADDR="https://vault.local.technoplaza.net:8200"' >> ~/.bashrc
+RUN echo 'export VAULT_SKIP_VERIFY=1' >> ~/.bashrc
 
 # install poetry venv and symlink to ~/venv
 COPY poetry.lock pyproject.toml .
