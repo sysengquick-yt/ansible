@@ -1,10 +1,11 @@
 {
   "name": "ansible-tutorial-2024",
+
   "image": "ghcr.io/sysengquick-yt/ansible:latest",
 
   "mounts": [
-    "source=${env:HOME}/.ssh,target=/home/vscode/wsl-ssh,type=bind",
-    "source=${env:HOME}/private,target=/home/vscode/private,type=bind"
+    "source=${env:HOME}/.ssh,target=/ssh,type=bind",
+    "source=${env:HOME}/private,target=/private,type=bind"
   ],
 
   "customizations": {
@@ -12,10 +13,10 @@
       "extensions": [
         "bierner.markdown-preview-github-styles",
         "DavidAnson.vscode-markdownlint",
+        "dhoeric.ansible-vault",
         "donjayamanne.githistory",
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
-        "ipierre1.ansible-vault-vscode",
         "mhutchie.git-graph",
         "ms-python.black-formatter",
         "ms-python.flake8",
@@ -41,7 +42,7 @@
             "source.organizeImports": "explicit"
           }
         },
-        "ansible.python.interpreterPath": "/home/vscode/venv/bin/python3",
+        "ansible.python.interpreterPath": "/venv/bin/python3",
         "editor.formatOnSave": true,
         "files.associations": {
           "*.j2": "ansible-jinja",
@@ -49,8 +50,9 @@
         },
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
-        "python.defaultInterpreterPath": "/home/vscode/venv/bin/python3"
+        "python.defaultInterpreterPath": "/venv/bin/python3"
       }
     }
-  }
+  },
+  "remoteUser": "root"
 }
